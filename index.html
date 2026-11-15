@@ -782,8 +782,15 @@
 
   async function cargarDatos() {
     if (MODO_DEMO) return datosDemo();
-    const res = await fetch(API_URL + "?action=data");
-    return await res.json();
+    // Si Google tarda demasiado, seguimos sin esperar
+    const control = new AbortController();
+    const corte = setTimeout(() => control.abort(), 12000);
+    try {
+      const res = await fetch(API_URL + "?action=data", { signal: control.signal });
+      return await res.json();
+    } finally {
+      clearTimeout(corte);
+    }
   }
 
   // ---------- Cumpleaños ----------
@@ -1022,7 +1029,9 @@
         </div>`;
     }).join("");
 
-    const opciones = lista.map((m) => `<option value="${esc(m.nombre)}">${esc(m.nombre)}</option>`).join("");
+    // Si la lista llega vacía, usamos los 8 nombres para que el formulario no quede sin opciones
+    const nombresBias = lista.length ? lista.map((m) => m.nombre) : ["Hongjoong", "Seonghwa", "Yunho", "Yeosang", "San", "Mingi", "Wooyoung", "Jongho"];
+    const opciones = nombresBias.map((n) => `<option value="${esc(n)}">${esc(n)}</option>`).join("");
     $("bias").innerHTML = `<option value="">Elige a tu favorito...</option>${opciones}<option value="Todos (OT8)">Amo a los ocho 💜 (OT8)</option>`;
   }
 
