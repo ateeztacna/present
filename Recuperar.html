@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recupera tu credencial · ATINY Tacna</title>
+  <link rel="icon" type="image/svg+xml" href="icono.svg">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="description" content="Recupera tu credencial de miembro del fan club ATINY Tacna (ATEEZ).">
+  <meta name="theme-color" content="#0e0000" id="metaTema">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;1,700;1,800&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0e0000;  --bg2: #1f0306;
+      --ac: #9c0512;  --ac2: #64090c;
+      --gold: #f8d794; --tx: #efeacd; --on-ac: #efeacd;
+      --bg-rgb: 14,0,0; --ac-rgb: 156,5,18; --gold-rgb: 248,215,148; --tx-rgb: 239,234,205;
+      --muted: rgba(var(--tx-rgb), .68);
+      --line: rgba(var(--gold-rgb), .22);
+      --card: rgba(var(--tx-rgb), .05);
+      --display: 'Barlow Condensed', sans-serif;
+      --serif: 'Cormorant Garamond', serif;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--tx); min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1; opacity: .3;
+      background: radial-gradient(ellipse at 50% 0%, rgba(var(--ac-rgb), .6), transparent 60%),
+                  repeating-linear-gradient(90deg, rgba(var(--ac-rgb), .5) 0 26px, rgba(var(--bg-rgb), .9) 26px 52px);
+      -webkit-mask-image: linear-gradient(180deg, #000, transparent 70%); mask-image: linear-gradient(180deg, #000, transparent 70%); }
+
+    h1, h3, .display { font-family: var(--display); font-style: italic; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; }
+    .eyebrow { color: var(--gold); font-weight: 700; font-size: .78rem; letter-spacing: 4px; text-transform: uppercase; }
+    .muted { color: var(--muted); }
+    .brand { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 1.9rem; letter-spacing: 1px; color: var(--tx); text-decoration: none; line-height: 1; }
+    .brand small { display: block; font-family: 'DM Sans', sans-serif; font-style: normal; font-weight: 700; font-size: .6rem; letter-spacing: 4px; color: var(--gold); }
+
+    .btn-main { background: linear-gradient(100deg, var(--ac), var(--ac2)); color: var(--on-ac); border: 1px solid rgba(var(--gold-rgb), .4); font-weight: 700; border-radius: 6px; padding: 12px 28px; box-shadow: 0 6px 28px rgba(var(--ac-rgb), .45); transition: .25s; }
+    .btn-main:hover { color: var(--on-ac); transform: translateY(-2px); box-shadow: 0 10px 36px rgba(var(--ac-rgb), .7); }
+    .btn-line { border: 1px solid var(--gold); color: var(--gold); background: transparent; border-radius: 6px; padding: 11px 24px; font-weight: 700; transition: .25s; text-decoration: none; display: inline-block; }
+    .btn-line:hover { background: var(--gold); color: var(--bg); }
+    .btn-wa { background: #25d366; color: #06230f; font-weight: 800; border: 0; border-radius: 6px; padding: 12px 28px; }
+    .btn-wa:hover { background: #3be67d; color: #06230f; }
+
+    .volver { color: var(--gold); text-decoration: none; font-weight: 500; font-size: .92rem; }
+    .volver:hover { color: var(--tx); }
+
+    .titulo { font-size: clamp(2.6rem, 9vw, 4.6rem); line-height: .9; margin: 8px 0 10px; }
+    .titulo em { font-family: var(--serif); font-weight: 500; text-transform: none; color: var(--gold); }
+
+    .chip-cb { display: inline-flex; gap: 8px; align-items: center; padding: 7px 16px; border: 1px solid var(--gold); border-radius: 50px; font-size: .82rem; color: var(--gold); background: rgba(var(--bg-rgb), .6); text-decoration: none; }
+    .chip-cb:hover { background: var(--gold); color: var(--bg); }
+    .chip-cb i.punto { width: 8px; height: 8px; border-radius: 50%; background: #e11; animation: pulso 1.2s infinite; }
+    @keyframes pulso { 50% { opacity: .2; } }
+
+    .panel { background: rgba(var(--bg-rgb), .75); backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 16px; padding: 30px; }
+    .form-control, .form-select { background-color: rgba(var(--tx-rgb), .06); border: 1px solid var(--line); border-radius: 8px; padding: 11px 14px; color: var(--tx); }
+    .form-control:focus, .form-select:focus { background-color: rgba(var(--tx-rgb), .1); border-color: var(--gold); box-shadow: 0 0 0 .2rem rgba(var(--gold-rgb), .2); color: var(--tx); }
+    .form-control::placeholder { color: rgba(var(--tx-rgb), .4); }
+    .form-select option { background: var(--bg2); color: var(--tx); }
+    .input-group-text { background: rgba(var(--tx-rgb), .1); border: 1px solid var(--line); color: var(--muted); border-radius: 8px 0 0 8px; }
+    .input-group .form-control { border-radius: 0 8px 8px 0; }
+    .form-label { font-weight: 500; font-size: .88rem; }
+    .form-check-input:checked { background-color: var(--ac); border-color: var(--gold); }
+    .trampa { position: absolute; left: -9999px; }
+
+    .exito { text-align: center; padding: 14px 0; }
+    .exito .emoji { font-size: 3.6rem; display: inline-block; animation: latido 1.3s infinite; }
+    @keyframes latido { 50% { transform: scale(1.15); } }
+    .barra-redir { height: 6px; border-radius: 6px; background: rgba(var(--tx-rgb), .12); overflow: hidden; margin: 18px auto; max-width: 320px; }
+    .barra-redir i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--ac), var(--gold)); }
+
+
+    /* ============ CREDENCIAL ============ */
+    .cred { text-align: left; }
+    .cred-wrap { perspective: 800px; max-width: 440px; margin: 0 auto; }
+    .cred { position: relative; aspect-ratio: 1.586; border-radius: 20px; padding: 20px 22px; overflow: hidden; color: var(--tx);
+      background: linear-gradient(135deg, var(--ac) 0%, var(--ac2) 48%, var(--bg) 100%); border: 1.5px solid var(--gold);
+      box-shadow: 0 22px 60px rgba(var(--ac-rgb), .55); display: flex; flex-direction: column; justify-content: space-between; transition: transform .15s; }
+    .cred::before { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(var(--gold-rgb), .28) 46%, transparent 60%); background-size: 250% 100%; animation: brillo 4.5s linear infinite; }
+    @keyframes brillo { from { background-position: 150% 0; } to { background-position: -100% 0; } }
+    .cred > * { position: relative; }
+    .cred-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .cred-brand { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 1.5rem; letter-spacing: 1px; line-height: 1; color: var(--tx); }
+    .cred-brand span { color: var(--gold); margin: 0 4px; }
+    .cred-city { font-size: .6rem; letter-spacing: 3px; font-weight: 700; color: var(--gold); text-align: right; }
+    .cred-mid { display: flex; gap: 14px; align-items: center; }
+    .cred-avatar { width: 68px; height: 68px; border-radius: 50%; border: 2px solid var(--gold); display: grid; place-items: center; overflow: hidden; flex-shrink: 0;
+      background: var(--bg); font-family: var(--display); font-style: italic; font-weight: 800; font-size: 1.9rem; color: var(--gold); }
+    .cred-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .cred-label { font-size: .55rem; letter-spacing: 3px; color: var(--gold); font-weight: 700; }
+    .cred-name { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 1.55rem; line-height: 1.02; text-transform: uppercase; max-height: 3.1em; overflow: hidden; word-break: break-word; color: var(--tx); }
+    .cred-bias { font-size: .78rem; color: var(--tx); opacity: .9; margin-top: 4px; }
+    .cred-bot { display: flex; justify-content: space-between; align-items: flex-end; font-size: .85rem; }
+    .cred-bot b { font-family: var(--display); font-style: italic; font-size: 1.15rem; letter-spacing: 1px; color: var(--tx); }
+    .cred-stars { color: var(--gold); letter-spacing: 3px; font-size: .75rem; }
+    .cred-bars { height: 16px; opacity: .45; background: repeating-linear-gradient(90deg, rgba(var(--tx-rgb), .9) 0 2px, transparent 2px 6px, rgba(var(--tx-rgb), .9) 6px 7px, transparent 7px 11px); }
+    .btn-line { border: 1px solid var(--gold); color: var(--gold); background: transparent; border-radius: 6px; padding: 11px 26px; font-weight: 700; transition: .25s; }
+    .btn-line:hover { background: var(--gold); color: var(--bg); }
+    @media (max-width: 575px) { .panel { padding: 20px; } .cred-name { font-size: 1.25rem; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+      .spin { display:inline-block; width:1em; height:1em; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:giro .7s linear infinite; vertical-align:-.15em; margin-right:.5em; }
+    @keyframes giro { to { transform:rotate(360deg); } }
+    .btn[disabled] { cursor:wait; }
+  </style>
+</head>
+
+<body>
+  <header class="container py-3 d-flex justify-content-between align-items-center">
+    <a class="brand" href="index.html"><span class="nombreGrupo">ATEEZ</span><small>ATINY TACNA</small></a>
+    <a class="volver" href="index.html"><i class="bi bi-arrow-left"></i> Ir a la página principal</a>
+  </header>
+
+  <main class="container pb-5" style="max-width:760px">
+    <div class="text-center pt-3 pb-4">
+      <div class="eyebrow">Fan club · Tacna, Perú</div>
+      <h1 class="titulo">Recupera tu <em>credencial</em></h1>
+      <p class="muted">Escribe el celular y el correo con los que te registraste.</p>
+    </div>
+
+    <div class="panel">
+      <!-- Búsqueda -->
+      <form id="formRecuperar" novalidate>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="recCelular">Celular *</label>
+            <input type="tel" class="form-control" id="recCelular" placeholder="9 dígitos" maxlength="9" inputmode="numeric" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="recCorreo">Correo registrado *</label>
+            <input type="email" class="form-control" id="recCorreo" placeholder="tucorreo@gmail.com" required maxlength="100" autocomplete="email">
+          </div>
+          <div class="col-12">
+            <div class="alert alert-danger d-none" id="errorRecuperar"></div>
+            <button type="submit" class="btn btn-main btn-lg w-100" id="btnBuscar"><i class="bi bi-search"></i> Buscar mi credencial</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Resultado -->
+      <div class="exito d-none" id="exito">
+        <div class="emoji">💜</div>
+        <h3 class="mt-2" style="font-size:2.4rem">¡Hola de nuevo, <span id="exitoNombre"></span>!</h3>
+        <p class="muted mb-4">Esta es tu credencial:</p>
+
+        <div class="cred-wrap">
+          <div class="cred" id="cred">
+            <div class="cred-top">
+              <div class="cred-brand"><span class="nombreGrupo">ATEEZ</span><span>✕</span>ATINY</div>
+              <div class="cred-city">FAN CLUB<br>TACNA · PERÚ</div>
+            </div>
+            <div class="cred-mid">
+              <div class="cred-avatar" id="credAvatar">?</div>
+              <div>
+                <div class="cred-label">MIEMBRO</div>
+                <div class="cred-name" id="credNombre">Tu nombre</div>
+                <div class="cred-bias">BIAS · <b id="credBias" style="font-weight:700">—</b></div>
+              </div>
+            </div>
+            <div class="cred-bot">
+              <div><div class="cred-label">N°</div><b id="credNumero">TAC-????</b></div>
+              <div class="cred-stars">✦✦✦✦✦✦✦✦</div>
+              <div style="text-align:right"><div class="cred-label">DESDE</div><b id="credDesde">--/----</b></div>
+            </div>
+            <div class="cred-bars"></div>
+          </div>
+        </div>
+
+        <p class="muted small mt-3 mb-3">Descárgala y compártela con orgullo ATINY 💜</p>
+        <div class="d-grid gap-2 mx-auto" style="max-width:340px">
+          <button class="btn btn-line" id="btnDescargar" type="button"><i class="bi bi-download"></i> Descargar credencial (PNG)</button>
+          <div class="small text-danger d-none" id="errorDescarga"></div>
+
+          <button class="btn btn-link text-decoration-none" style="color:var(--gold)" type="button" data-bs-toggle="collapse" data-bs-target="#panelBias"><i class="bi bi-arrow-left-right"></i> Cambiar mi bias</button>
+          <div class="collapse" id="panelBias">
+            <div class="panel p-3 text-start">
+              <select class="form-select mb-2" id="cambiarBias"></select>
+              <button class="btn btn-line w-100" id="btnGuardarBias" type="button">Guardar bias</button>
+              <div class="small mt-2 d-none" id="msgBias"></div>
+            </div>
+          </div>
+
+          <a href="index.html" class="btn btn-main"><i class="bi bi-stars"></i> Explora nuestra página</a>
+          <a href="#" class="btn btn-wa linkWhatsApp" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i> Unirme al WhatsApp</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center small muted mt-4">
+      ¿Aún no te registraste? <a class="volver" href="registro.html">Regístrate aquí</a>
+    </p>
+  </main>
+
+  <footer class="text-center small muted pb-4 px-3">
+    Fan club hecho por fans, sin fines de lucro y no oficial. <span class="nombreGrupo">ATEEZ</span> pertenece a sus dueños (KQ Entertainment). Hecho con 💜 en Tacna, Perú.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="config.js"></script>
+  <script src="tema.js"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    let DATA = { config: {}, integrantes: [] };
+    let miembro = null;   // credencial encontrada + celular y correo (solo en memoria, no se guardan)
+
+    const DEMO = {
+      config: { nombre_grupo: "ATEEZ", whatsapp_url: "https://chat.whatsapp.com/", comeback_era: "tacna" },
+      integrantes: ["Hongjoong", "Seonghwa", "Yunho", "Yeosang", "San", "Mingi", "Wooyoung", "Jongho"].map((n) => ({ nombre: n }))
+    };
+
+    function esc(texto) {
+      const div = document.createElement("div");
+      div.textContent = texto == null ? "" : texto;
+      return div.innerHTML;
+    }
+
+    async function cargarDatos() {
+      if (MODO_DEMO) return DEMO;
+      const control = new AbortController();
+      const corte = setTimeout(() => control.abort(), 10000);
+      try {
+        const res = await fetch(API_URL + "?action=data", { signal: control.signal });
+        return await res.json();
+      } finally {
+        clearTimeout(corte);
+      }
+    }
+
+    function pintarDatos() {
+      const c = DATA.config || {};
+      document.querySelectorAll(".nombreGrupo").forEach((el) => (el.textContent = c.nombre_grupo || "ATEEZ"));
+      document.querySelectorAll(".linkWhatsApp").forEach((a) => (a.href = c.whatsapp_url || "#"));
+      const opciones = (DATA.integrantes || []).map((m) => `<option value="${esc(m.nombre)}">${esc(m.nombre)}</option>`).join("");
+      $("cambiarBias").innerHTML = opciones + '<option value="Todos (OT8)">Amo a los ocho 💜 (OT8)</option>';
+    }
+
+    function avatarHTML(nombre, foto) {
+      return foto ? `<img src="${esc(foto)}" alt="${esc(nombre)}" crossorigin="anonymous" onerror="fotoFallo(this)">` : esc(String(nombre).charAt(0).toUpperCase());
+    }
+
+    // Si la foto no carga: 1) directa con CORS, 2) por un proxy de imágenes, 3) sin CORS, 4) la inicial
+    function fotoFallo(img) {
+      const etapa = img.dataset.etapa || "0";
+      if (!img.hasAttribute("crossorigin")) {
+        img.replaceWith(document.createTextNode(img.alt.charAt(0).toUpperCase()));
+        return;
+      }
+      if (etapa === "0") {
+        img.dataset.etapa = "1";
+        img.dataset.original = img.src;
+        img.src = "https://wsrv.nl/?url=" + encodeURIComponent(img.src);
+        return;
+      }
+      img.removeAttribute("crossorigin");
+      img.src = img.dataset.original;
+    }
+
+    // Botón "ocupado": spinner con texto mientras se hace la acción
+    function ocupado(boton, activo, texto) {
+      if (activo) {
+        boton.dataset.html = boton.innerHTML;
+        boton.innerHTML = '<span class="spin"></span>' + texto;
+        boton.disabled = true;
+      } else {
+        if (boton.dataset.html) boton.innerHTML = boton.dataset.html;
+        boton.disabled = false;
+      }
+    }
+
+    function pintarCredencial() {
+      const integrante = (DATA.integrantes || []).find((m) => m.nombre === miembro.bias);
+      $("exitoNombre").textContent = miembro.nombre.split(" ")[0];
+      $("credNombre").textContent = miembro.nombre;
+      $("credBias").textContent = miembro.bias;
+      $("credNumero").textContent = miembro.numero;
+      $("credDesde").textContent = miembro.desde;
+      $("credAvatar").innerHTML = integrante ? avatarHTML(integrante.nombre, integrante.foto) : "💜";
+      $("cambiarBias").value = miembro.bias;
+    }
+
+    // ---------- Buscar ----------
+    $("recCelular").addEventListener("input", (e) => (e.target.value = e.target.value.replace(/\D/g, "")));
+
+    $("formRecuperar").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      $("errorRecuperar").classList.add("d-none");
+      const celular = $("recCelular").value.trim();
+      const correo = $("recCorreo").value.trim().toLowerCase();
+      if (!/^9\d{8}$/.test(celular) || !correo) {
+        $("errorRecuperar").textContent = "Escribe tu celular (9 dígitos) y tu correo.";
+        $("errorRecuperar").classList.remove("d-none");
+        return;
+      }
+      ocupado($("btnBuscar"), true, "Buscando tu credencial...");
+      try {
+        let r;
+        if (MODO_DEMO) {
+          await esperar(800);
+          r = { ok: true, nombre: "Miembro de ejemplo", bias: "San", numero: "TAC-0007", desde: "11/2026" };
+        } else {
+          const control = new AbortController();
+          const corte = setTimeout(() => control.abort(), 20000);
+          try {
+            const res = await fetch(API_URL + "?action=credencial&celular=" + encodeURIComponent(celular) + "&correo=" + encodeURIComponent(correo), { signal: control.signal });
+            r = await res.json();
+          } catch (errRed) {
+            throw new Error("No pudimos conectar. Revisa tu conexión e inténtalo de nuevo.");
+          } finally {
+            clearTimeout(corte);
+          }
+        }
+        if (!r.ok) throw new Error(r.error || "No encontramos tu registro.");
+        miembro = { nombre: r.nombre, bias: r.bias, numero: r.numero, desde: r.desde, celular: celular, correo: correo };
+        pintarCredencial();
+        $("formRecuperar").classList.add("d-none");
+        $("exito").classList.remove("d-none");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } catch (err) {
+        $("errorRecuperar").innerHTML = esc(err.message) + ' ¿Aún no te registraste? <a class="alert-link" href="registro.html">Regístrate aquí</a>';
+        $("errorRecuperar").classList.remove("d-none");
+      } finally {
+        ocupado($("btnBuscar"), false);
+      }
+    });
+
+    // ---------- Descargar ----------
+    $("btnDescargar").addEventListener("click", async () => {
+      $("errorDescarga").classList.add("d-none");
+      ocupado($("btnDescargar"), true, "Generando tu credencial...");
+      try {
+        if (!window.html2canvas) throw new Error("No se cargó la herramienta de descarga.");
+        const foto = $("credAvatar").querySelector("img");
+        if (foto && !foto.complete) await new Promise((ok) => { foto.onload = ok; foto.onerror = ok; setTimeout(ok, 4000); });
+        const canvas = await html2canvas($("cred"), { backgroundColor: null, scale: 3, useCORS: true });
+        const a = document.createElement("a");
+        a.download = "credencial-atiny-tacna.png";
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+      } catch (err) {
+        $("errorDescarga").textContent = "No se pudo descargar. Toma una captura de pantalla de tu credencial.";
+        $("errorDescarga").classList.remove("d-none");
+      } finally {
+        ocupado($("btnDescargar"), false);
+      }
+    });
+
+    // ---------- Cambiar bias ----------
+    $("btnGuardarBias").addEventListener("click", async () => {
+      const msg = $("msgBias");
+      const bias = $("cambiarBias").value;
+      msg.className = "small mt-2 muted";
+      msg.textContent = "Guardando...";
+      ocupado($("btnGuardarBias"), true, "Guardando...");
+      try {
+        if (!MODO_DEMO) {
+          const control = new AbortController();
+          const corte = setTimeout(() => control.abort(), 20000);
+          let r;
+          try {
+            const res = await fetch(API_URL, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify({ accion: "cambiar_bias", celular: miembro.celular, correo: miembro.correo, bias: bias }),
+              signal: control.signal
+            });
+            r = await res.json();
+          } catch (errRed) {
+            throw new Error("No pudimos confirmar el cambio. Inténtalo de nuevo.");
+          } finally {
+            clearTimeout(corte);
+          }
+          if (!r.ok) throw new Error(r.error || "No se pudo cambiar el bias.");
+        } else {
+          await esperar(500);
+        }
+        miembro.bias = bias;
+        pintarCredencial();
+        msg.className = "small mt-2 text-success";
+        msg.textContent = "¡Listo! Tu bias ahora es " + bias + ". Ya puedes descargar tu credencial nueva.";
+      } catch (err) {
+        msg.className = "small mt-2 text-danger";
+        msg.textContent = err.message;
+      } finally {
+        ocupado($("btnGuardarBias"), false);
+      }
+    });
+
+    // ---------- Inicio ----------
+    (async function iniciar() {
+      const elegida = leerEraGuardada();
+      if (elegida) aplicarTema(elegida);
+      DATA = { config: {}, integrantes: DEMO.integrantes };
+      pintarDatos();
+      try {
+        const real = await cargarDatos();
+        if (real && real.config) {
+          DATA = { config: real.config, integrantes: (real.integrantes && real.integrantes.length) ? real.integrantes : DEMO.integrantes };
+          pintarDatos();
+        }
+      } catch (err) { console.error(err); }
+      if (!elegida) aplicarTema((DATA.config && DATA.config.comeback_era) || "tacna", false);
+    })();
+  </script>
+</body>
+</html>
