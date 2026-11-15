@@ -556,8 +556,12 @@
                 <div class="invalid-feedback">Elige a tu bias.</div>
               </div>
               <div class="col-12">
-                <label class="form-label" for="distrito">Distrito o zona de Tacna <small class="muted">(opcional)</small></label>
-                <input type="text" class="form-control" id="distrito" placeholder="Ej: Cercado, Alto de la Alianza, Gregorio Albarracín..." maxlength="60">
+                <label class="form-label" for="atinyDesde">¿Desde qué año eres ATINY? <small class="muted">(opcional)</small></label>
+                <select class="form-select" id="atinyDesde">
+                  <option value="">Elige un año...</option>
+                  <option>2018</option><option>2019</option><option>2020</option><option>2021</option>
+                  <option>2022</option><option>2023</option><option>2024</option><option>2025</option><option>2026</option>
+                </select>
               </div>
               <div class="col-12">
                 <div class="form-check">
@@ -1334,7 +1338,7 @@
       edad: calcularEdad($("fechaNacimiento").value),
       correo: $("correo").value.trim().toLowerCase(),
       bias: $("bias").value,
-      distrito: $("distrito").value.trim(),
+      atiny_desde: $("atinyDesde").value,
       web: $("web").value
     };
 
