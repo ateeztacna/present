@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ATEEZ Fan Club Tacna · ATINY</title>
+  <link rel="icon" type="image/svg+xml" href="icono.svg">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="description" content="ATINY Tacna: fan club de ATEEZ en Tacna, Perú. Cumpleaños, eras, videos, galería, redes y credencial de miembro.">
   <meta name="theme-color" content="#0e0000" id="metaTema">
 
@@ -36,6 +39,27 @@
     .sec-title { font-size: clamp(2.2rem, 6vw, 4rem); line-height: .95; margin: 8px 0 14px; }
     .sec-title em { font-family: var(--serif); font-weight: 500; text-transform: none; color: var(--gold); }
     .sec-sub { color: var(--muted); max-width: 620px; }
+
+    /* ============ Carga de datos ============ */
+    .skel { position: relative; overflow: hidden; border-radius: 12px; background: rgba(var(--tx-rgb), .07); min-height: 18px; }
+    .skel::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(var(--tx-rgb), .14), transparent); animation: brillo 1.3s infinite; }
+    @keyframes brillo { to { transform: translateX(100%); } }
+    .skel-card { height: 230px; }
+    .skel-video { height: 190px; }
+    .skel-foto { height: 180px; }
+    .skel-fila { height: 56px; margin-bottom: 10px; }
+    .skel-evento { height: 84px; }
+    .skel-spot { height: 260px; }
+    .aparece > * { animation: aparece .55s ease both; }
+    .aparece > *:nth-child(2) { animation-delay: .06s; } .aparece > *:nth-child(3) { animation-delay: .12s; }
+    .aparece > *:nth-child(4) { animation-delay: .18s; } .aparece > *:nth-child(5) { animation-delay: .24s; }
+    .aparece > *:nth-child(6) { animation-delay: .30s; } .aparece > *:nth-child(7) { animation-delay: .36s; }
+    .aparece > *:nth-child(n+8) { animation-delay: .42s; }
+    @keyframes aparece { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    #barraCarga { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 2000; background: linear-gradient(90deg, var(--ac), var(--gold)); box-shadow: 0 0 10px var(--gold); transition: width .4s ease, opacity .4s; }
+    #avisoCarga { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 2000; background: rgba(var(--bg-rgb), .92); border: 1px solid var(--line); border-radius: 50px; padding: 8px 18px; font-size: .85rem; color: var(--gold); display: none; align-items: center; gap: 8px; white-space: nowrap; }
+    @media (prefers-reduced-motion: reduce) { .skel::after, .aparece > * { animation: none; } }
 
     /* ============ Navbar ============ */
     #nav { transition: .3s; padding: 14px 0; }
@@ -618,7 +642,7 @@
   <div class="container text-center">
     <div class="brand d-inline-block mb-3"><span class="nombreGrupo">ATEEZ</span><small>ATINY TACNA · FAN CLUB</small></div>
     <div class="redes-foot mb-3" id="redesFoot"></div>
-    <p class="muted small mb-1">Fan club hecho por fans, sin fines de lucro y oficial, pertenecientes a las sedes de Ateez Perú. Hecho con 💜 en Tacna, Perú.</p>
+    <p class="muted small mb-1">Fan club hecho por fans, sin fines de lucro y no oficial. La música, los nombres, logos e imágenes de <span class="nombreGrupo">ATEEZ</span> pertenecen a sus dueños (KQ Entertainment).</p>
     <p class="muted small mb-0">Hecho con 💜 en Tacna, Perú</p>
   </div>
 </footer>
@@ -675,7 +699,7 @@
         style="background:linear-gradient(135deg,${e.ac} 50%,${e.gold} 50%)"></button>`).join("");
   }
 
-  // ---------- Datos de ejemplo ----------
+  // ---------- Datos de ejemplo (modo demo) ----------
   function datosDemo() {
     const enDias = (d) => { const f = new Date(Date.now() + d * 86400000); f.setHours(18, 0, 0, 0); return f.toISOString(); };
     const nombres = ["Hongjoong", "Seonghwa", "Yunho", "Yeosang", "San", "Mingi", "Wooyoung", "Jongho"];
@@ -1398,7 +1422,44 @@
   }
 
   // ---------- Inicio ----------
+  function esqueletos(id, cantidad, claseCaja, claseCol) {
+    let html = "";
+    for (let i = 0; i < cantidad; i++) html += `<div class="${claseCol}"><div class="skel ${claseCaja}"></div></div>`;
+    $(id).innerHTML = html;
+  }
+
+  function mostrarCarga() {
+    const barra = document.createElement("div");
+    barra.id = "barraCarga";
+    const aviso = document.createElement("div");
+    aviso.id = "avisoCarga";
+    aviso.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Cargando datos del fan club...';
+    document.body.appendChild(barra);
+    document.body.appendChild(aviso);
+    setTimeout(() => { barra.style.width = "70%"; }, 50);
+    // Si tarda, mostramos el aviso (el servidor de Google a veces despierta lento)
+    setTimeout(() => { aviso.style.display = "flex"; }, 1500);
+
+    esqueletos("listaIntegrantes", 8, "skel-card", "col-6 col-md-4 col-lg-3");
+    esqueletos("listaVideos", 6, "skel-video", "col-md-6 col-lg-4");
+    esqueletos("listaFotos", 8, "skel-foto", "col-6 col-md-4 col-lg-3");
+    esqueletos("listaRedes", 6, "skel-fila", "col-md-6 col-lg-4");
+    esqueletos("listaEventos", 2, "skel-evento", "");
+    $("spot").innerHTML = '<div class="skel skel-spot"></div>';
+    $("listaRanking").innerHTML = '<div class="skel skel-fila"></div>'.repeat(5);
+  }
+
+  function terminarCarga() {
+    const barra = $("barraCarga");
+    const aviso = $("avisoCarga");
+    if (barra) { barra.style.width = "100%"; setTimeout(() => { barra.style.opacity = "0"; }, 400); setTimeout(() => barra.remove(), 900); }
+    if (aviso) aviso.remove();
+    // Las tarjetas aparecen una por una
+    ["listaIntegrantes", "listaVideos", "listaFotos", "listaRedes", "listaEventos", "listaRanking"].forEach((id) => $(id).classList.add("aparece"));
+  }
+
   (async function iniciar() {
+    mostrarCarga();
     try { DATA = await cargarDatos(); } catch (err) { console.error(err); DATA = datosDemo(); }
 
     // Si la persona no eligió era, se usa la del comeback (si hay) o la de Tacna
@@ -1417,6 +1478,7 @@
     pintarRanking();
     aplicarEra(eraInicial, Boolean(eraElegida));   // también pinta las eras y los puntos del selector
     pintarCredencial({});
+    terminarCarga();
 
     // Si ya se registró antes en este navegador, mostramos su credencial
     try {
