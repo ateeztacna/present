@@ -28,7 +28,8 @@
       --serif: 'Cormorant Garamond', serif;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--tx); overflow-x: hidden; transition: background .5s; }
+    html { overflow-x: clip; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--tx); overflow-x: clip; transition: background .5s; }
     section { padding: 96px 0; position: relative; scroll-margin-top: 60px; }
     .alt-bg { background: linear-gradient(180deg, var(--bg), var(--bg2) 50%, var(--bg)); }
     .muted { color: var(--muted); }
@@ -476,7 +477,7 @@
 <!-- ================= RANKING ================= -->
 <section id="ranking">
   <div class="container">
-    <div class="row g-5 align-items-center">
+    <div class="row gy-5 gx-lg-5 align-items-center">
       <div class="col-lg-5 reveal">
         <span class="eyebrow">Comunidad</span>
         <h2 class="sec-title">El bias más querido de <em>Tacna</em></h2>
@@ -510,7 +511,7 @@
 
     <div class="aviso-reg text-center mb-4 d-none" id="avisoRegistro">🎉 <b>¡Registro completado!</b> Esta es tu credencial: descárgala y entra al grupo de WhatsApp.</div>
 
-    <div class="row g-5 align-items-start">
+    <div class="row gy-5 gx-lg-5 align-items-start">
       <!-- Formulario -->
       <div class="col-lg-7 reveal">
         <div class="panel form-card">
