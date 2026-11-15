@@ -205,7 +205,7 @@
     .cred-bars { height: 16px; opacity: .45; background: repeating-linear-gradient(90deg, rgba(var(--tx-rgb), .9) 0 2px, transparent 2px 6px, rgba(var(--tx-rgb), .9) 6px 7px, transparent 7px 11px); }
 
     /* ============ Banner de comeback ============ */
-    #comeback { display: none; padding: 100px 0 10px; }
+    #comeback { display: none; padding: 40px 0 10px; }
     .cb-card { position: relative; overflow: hidden; border: 1px solid var(--gold); border-radius: 20px; padding: 44px 38px; background-color: var(--bg2); background-size: cover; background-position: center;
       background-image: linear-gradient(115deg, rgba(var(--bg-rgb), .95) 20%, rgba(var(--ac-rgb), .55)), repeating-linear-gradient(90deg, rgba(var(--ac-rgb), .25) 0 22px, transparent 22px 44px);
       box-shadow: 0 20px 70px rgba(var(--ac-rgb), .45); }
@@ -218,8 +218,7 @@
     .cb-card .cd { justify-content: flex-start; margin: 22px 0 10px; }
     .cb-ya { display: none; font-family: var(--display); font-style: italic; font-weight: 800; font-size: 2.4rem; color: var(--gold); margin: 18px 0 10px; text-transform: uppercase; }
     .cb-fecha { font-size: .85rem; color: var(--muted); }
-    body.con-banner .hero { min-height: auto; padding-top: 60px; }
-    body.con-banner .hero .marquee { margin-top: 50px; }
+    .hero { min-height: 88vh; }
 
     /* ============ Perfil de integrante (popup) ============ */
     .miembro { cursor: pointer; }
@@ -344,7 +343,7 @@
     <div class="reveal mb-5">
       <span class="eyebrow">Celebramos juntos</span>
       <h2 class="sec-title">Cumpleaños <em>&amp; agenda</em></h2>
-      <p class="sec-sub">Nunca más te pierdas el cumple de tu bias. Y si quieres, también saludamos el tuyo.</p>
+      <p class="sec-sub">Nunca más te pierdas el cumple de tu bias.</p>
     </div>
 
     <div class="row g-4">
@@ -360,11 +359,6 @@
     <div class="reveal mt-5">
       <h5 class="display mb-3" style="font-size:1.6rem">El año de ATEEZ</h5>
       <div class="tira" id="tiraAnual"></div>
-    </div>
-
-    <div class="reveal mt-5 text-center">
-      <h5 class="display" style="font-size:1.6rem">🎈 Cumpleañeros ATINY Tacna este mes</h5>
-      <div id="cumpleFans" class="muted"></div>
     </div>
   </div>
 </section>
@@ -401,8 +395,15 @@
       <h2 class="sec-title">Videos musicales</h2>
       <p class="sec-sub mx-auto">Míralos aquí mismo y súmales vistas.</p>
     </div>
-    <div class="d-flex flex-wrap gap-2 justify-content-center mb-4" id="filtroVideos"></div>
+    <div class="d-flex flex-wrap gap-2 justify-content-center mb-3" id="filtroVideos"></div>
+    <div class="mx-auto mb-4" style="max-width:420px">
+      <input type="search" class="form-control" id="buscarVideo" placeholder="Buscar un video o canción...">
+    </div>
     <div class="row g-4" id="listaVideos"></div>
+    <div class="text-center mt-4">
+      <button class="btn btn-line d-none" id="btnMasVideos">Ver más videos</button>
+      <div class="small muted mt-2" id="contadorVideos"></div>
+    </div>
   </div>
 </section>
 
@@ -530,10 +531,6 @@
                 <input type="text" class="form-control" id="distrito" placeholder="Ej: Cercado, Alto de la Alianza, Gregorio Albarracín..." maxlength="60">
               </div>
               <div class="col-12">
-                <div class="form-check mb-2">
-                  <input class="form-check-input" type="checkbox" id="mostrarCumple">
-                  <label class="form-check-label small muted" for="mostrarCumple">🎂 Quiero que mi nombre aparezca en "Cumpleañeros ATINY Tacna" el mes de mi cumple (solo se muestra tu primer nombre y el día).</label>
-                </div>
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" id="acepto" required>
                   <label class="form-check-label small muted" for="acepto">Acepto que el fan club use mis datos solo para contactarme y organizar actividades. *</label>
@@ -564,10 +561,6 @@
           <button class="btn btn-link text-decoration-none p-0" style="color:var(--gold)" data-bs-toggle="collapse" data-bs-target="#boxRecuperar">
             <i class="bi bi-arrow-repeat"></i> Ya me registré: recuperar mi credencial
           </button>
-          <button class="btn btn-link text-decoration-none p-0 ms-3" style="color:var(--gold)" id="btnCopiarForm">
-            <i class="bi bi-link-45deg"></i> Copiar link solo del formulario
-          </button>
-          <span class="small text-success ms-2 d-none" id="copiadoForm">¡Copiado!</span>
           <div class="collapse mt-3" id="boxRecuperar">
             <form id="formRecuperar" class="panel p-3" novalidate>
               <div class="row g-2">
@@ -740,7 +733,6 @@
         { bias: "San", total: 12 }, { bias: "Hongjoong", total: 9 }, { bias: "Wooyoung", total: 7 },
         { bias: "Jongho", total: 6 }, { bias: "Mingi", total: 4 }, { bias: "Yunho", total: 2 }
       ],
-      cumpleaneros: [],
       totalMiembros: 33
     };
   }
@@ -784,8 +776,10 @@
       .sort((a, b) => a.dias - b.dias);
   }
 
-  function avatarHTML(nombre, foto) {
-    return foto ? `<img src="${esc(foto)}" alt="${esc(nombre)}" loading="lazy" crossorigin="anonymous">` : esc(String(nombre).charAt(0).toUpperCase());
+  // paraDescarga = true solo en la credencial: así html2canvas puede incluir la foto en el PNG
+  function avatarHTML(nombre, foto, paraDescarga) {
+    const cors = paraDescarga ? ' crossorigin="anonymous"' : "";
+    return foto ? `<img src="${esc(foto)}" alt="${esc(nombre)}" loading="lazy"${cors}>` : esc(String(nombre).charAt(0).toUpperCase());
   }
 
   let timerCumple = null;
@@ -843,12 +837,6 @@
       tira += `<div class="mes ${i === mesHoy ? "actual" : ""}"><b>${meses[i]}</b>${nombres}</div>`;
     }
     $("tiraAnual").innerHTML = tira;
-
-    // Cumpleañeros del fan club
-    const fans = DATA.cumpleaneros || [];
-    $("cumpleFans").innerHTML = fans.length
-      ? fans.map((f) => `<span class="fan-chip">🎂 ${esc(f.nombre)} · ${esc(f.dia)}</span>`).join("")
-      : `<p class="mt-2 mb-0">Aún no hay cumpleañeros este mes. Al registrarte, marca la casilla para que te saludemos 💜</p>`;
   }
 
   function lanzarConfeti() {
@@ -974,12 +962,6 @@
     if (el) abrirPerfil(el.dataset.perfil);
   });
 
-  // ---------- Copiar link del formulario ----------
-  $("btnCopiarForm").addEventListener("click", async () => {
-    const link = new URL("registro.html", location.href).href;
-    try { await navigator.clipboard.writeText(link); $("copiadoForm").classList.remove("d-none"); } catch (err) { prompt("Copia este link:", link); }
-  });
-
   // ---------- Config, integrantes, eventos ----------
   function pintarConfig() {
     const c = DATA.config || {};
@@ -1061,7 +1043,10 @@
   }
 
   // ---------- Videos ----------
+  const VIDEOS_POR_PAGINA = 12;
   let categoriaVideo = "Todos";
+  let textoVideo = "";
+  let videosVisibles = VIDEOS_POR_PAGINA;
 
   function pintarVideos() {
     const todos = DATA.videos || [];
@@ -1069,8 +1054,11 @@
     $("filtroVideos").innerHTML = categorias.map((c) =>
       `<button class="chip ${c === categoriaVideo ? "active" : ""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
 
-    const lista = todos.filter((v) => categoriaVideo === "Todos" || v.categoria === categoriaVideo);
-    $("listaVideos").innerHTML = lista.map((v) => {
+    const lista = todos
+      .filter((v) => categoriaVideo === "Todos" || v.categoria === categoriaVideo)
+      .filter((v) => String(v.titulo).toLowerCase().indexOf(textoVideo) !== -1);
+
+    $("listaVideos").innerHTML = lista.slice(0, videosVisibles).map((v) => {
       const id = youtubeId(v.url);
       const mini = id ? `<img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="${esc(v.titulo)}" loading="lazy">` : "";
       return `
@@ -1081,12 +1069,29 @@
           </div>
         </div>`;
     }).join("");
+
+    if (lista.length === 0) $("listaVideos").innerHTML = `<div class="col-12 text-center muted">No encontramos videos con esa búsqueda.</div>`;
+
+    $("btnMasVideos").classList.toggle("d-none", lista.length <= videosVisibles);
+    $("contadorVideos").textContent = lista.length > 0 ? "Mostrando " + Math.min(videosVisibles, lista.length) + " de " + lista.length + " videos" : "";
   }
 
   $("filtroVideos").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-cat]");
     if (!btn) return;
     categoriaVideo = btn.dataset.cat;
+    videosVisibles = VIDEOS_POR_PAGINA;
+    pintarVideos();
+  });
+
+  $("buscarVideo").addEventListener("input", (e) => {
+    textoVideo = e.target.value.trim().toLowerCase();
+    videosVisibles = VIDEOS_POR_PAGINA;
+    pintarVideos();
+  });
+
+  $("btnMasVideos").addEventListener("click", () => {
+    videosVisibles += VIDEOS_POR_PAGINA;
     pintarVideos();
   });
 
@@ -1221,7 +1226,7 @@
     $("credBias").textContent = bias;
     $("credNumero").textContent = c.numero || "TAC-????";
     $("credDesde").textContent = c.desde || "--/----";
-    $("credAvatar").innerHTML = integrante ? avatarHTML(integrante.nombre, integrante.foto) : (c.bias ? "💜" : "?");
+    $("credAvatar").innerHTML = integrante ? avatarHTML(integrante.nombre, integrante.foto, true) : (c.bias ? "💜" : "?");
   }
 
   function vistaPreviaCredencial() {
@@ -1301,7 +1306,6 @@
       correo: $("correo").value.trim().toLowerCase(),
       bias: $("bias").value,
       distrito: $("distrito").value.trim(),
-      mostrar_cumple: $("mostrarCumple").checked ? "SI" : "NO",
       web: $("web").value
     };
 
