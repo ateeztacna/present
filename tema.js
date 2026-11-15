@@ -1,7 +1,4 @@
-// =====================================================
-//  TEMAS POR ERA (compartido por index.html y registro.html)
-//  Paletas inspiradas en los álbumes de ATEEZ
-// =====================================================
+//  TEMAS POR ERA 
 const ERAS = [
   { id: "tacna", nombre: "Edición Tacna",        sub: "Burdeos y cerámica",       bg: "#0e0000", bg2: "#1f0306", ac: "#9c0512", ac2: "#64090c", gold: "#f8d794", tx: "#efeacd", onAc: "#efeacd" },
   { id: "gh1",   nombre: "Golden Hour : Part.1", sub: "Azul petróleo y oro",      bg: "#0c202e", bg2: "#14384d", ac: "#1d5273", ac2: "#123449", gold: "#c9ad7a", tx: "#f3ecd9", onAc: "#f3ecd9" },
@@ -47,4 +44,48 @@ function aplicarTema(id, guardar) {
   if (guardar !== false) {
     try { localStorage.setItem("ateezEra", e.id); } catch (err) {}
   }
+}
+
+// =====================================================
+//  Botón flotante 🎨 para cambiar de era (lo usan registro.html y recuperar.html)
+// =====================================================
+function montarSelectorEra() {
+  const estilo = document.createElement("style");
+  estilo.textContent = `
+    .era-fab { position: fixed; left: 18px; bottom: 18px; z-index: 99; }
+    .era-fab > button { width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--gold); background: var(--bg2); color: var(--gold); font-size: 1.4rem; box-shadow: 0 6px 24px rgba(0, 0, 0, .5); }
+    .era-panel { position: absolute; bottom: 66px; left: 0; width: 230px; padding: 14px; border-radius: 14px; background: rgba(var(--bg-rgb), .96); border: 1px solid var(--line); display: none; }
+    .era-fab.open .era-panel { display: block; }
+    .era-panel small { display: block; margin-bottom: 8px; color: var(--gold); letter-spacing: 3px; font-weight: 700; font-size: .62rem; text-transform: uppercase; }
+    .era-dots { display: flex; flex-wrap: wrap; gap: 8px; }
+    .era-dots button { width: 38px; height: 38px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .35); padding: 0; }
+    .era-dots button.activa { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(var(--gold-rgb), .4); }`;
+  document.head.appendChild(estilo);
+
+  const fab = document.createElement("div");
+  fab.className = "era-fab";
+  fab.innerHTML = `
+    <div class="era-panel"><small>Elige tu era</small><div class="era-dots"></div></div>
+    <button type="button" aria-label="Cambiar de era"><i class="bi bi-palette2"></i></button>`;
+  document.body.appendChild(fab);
+
+  const puntos = fab.querySelector(".era-dots");
+  function pintarPuntos() {
+    puntos.innerHTML = ERAS.map((e) => `
+      <button type="button" class="${e.id === eraActual ? "activa" : ""}" data-era="${e.id}" title="${e.nombre}" aria-label="${e.nombre}"
+        style="background:linear-gradient(135deg,${e.ac} 50%,${e.gold} 50%)"></button>`).join("");
+  }
+  pintarPuntos();
+
+  fab.querySelector(":scope > button").addEventListener("click", () => fab.classList.toggle("open"));
+  document.addEventListener("click", (e) => {
+    const punto = e.target.closest("[data-era]");
+    if (punto && fab.contains(punto)) {
+      aplicarTema(punto.dataset.era, true);
+      pintarPuntos();
+    } else if (!fab.contains(e.target)) {
+      fab.classList.remove("open");
+    }
+  });
+  return pintarPuntos;   // para repintar los puntos si la era cambia por los datos
 }
