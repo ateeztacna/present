@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>Staff · ATINY Tacna</title>
+  <link rel="icon" type="image/svg+xml" href="icono.svg">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="theme-color" content="#0e0000" id="metaTema">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -176,11 +179,11 @@
           { nombre: "Hongjoong", cumple: "1998-11-07" }, { nombre: "Seonghwa", cumple: "1998-04-03" }
         ],
         miembros: [
-          { nombre: "María Fernanda Quispe", celular: "987654321", bias: "San", distrito: "Cercado", fecha_nacimiento: hace(18, 0) },
-          { nombre: "Camila Mamani Ríos", celular: "955123456", bias: "Wooyoung", distrito: "Alto de la Alianza", fecha_nacimiento: hace(21, 4) },
-          { nombre: "Lucía Condori", celular: "944333222", bias: "Hongjoong", distrito: "Pocollay", fecha_nacimiento: hace(16, 11) },
-          { nombre: "Valeria Choque", celular: "933111000", bias: "Jongho", distrito: "", fecha_nacimiento: hace(25, 40) },
-          { nombre: "Ana Paola Flores", celular: "922000111", bias: "Mingi", distrito: "Gregorio Albarracín", fecha_nacimiento: hace(19, 95) }
+          { nombre: "María Fernanda Quispe", celular: "987654321", bias: "San", atiny_desde: "2019", fecha_nacimiento: hace(18, 0) },
+          { nombre: "Camila Mamani Ríos", celular: "955123456", bias: "Wooyoung", atiny_desde: "2020", fecha_nacimiento: hace(21, 4) },
+          { nombre: "Lucía Condori", celular: "944333222", bias: "Hongjoong", atiny_desde: "2018", fecha_nacimiento: hace(16, 11) },
+          { nombre: "Valeria Choque", celular: "933111000", bias: "Jongho", atiny_desde: "", fecha_nacimiento: hace(25, 40) },
+          { nombre: "Ana Paola Flores", celular: "922000111", bias: "Mingi", atiny_desde: "2022", fecha_nacimiento: hace(19, 95) }
         ]
       };
     }
@@ -232,7 +235,7 @@
             <div class="fecha-box ${p.tipo === "ateez" ? "ateez" : ""}"><b>${p.dia}</b><span>${meses[p.mes]}</span></div>
             <div>
               <div class="fw-semibold">${p.tipo === "ateez" ? "🎂 " : ""}${esc(p.nombre)}${p.tipo === "ateez" ? '<span class="etiqueta">ATEEZ</span>' : ""}</div>
-              <div class="small muted">cumple ${p.edad} años${p.bias ? " · Bias: " + esc(p.bias) : ""}${p.distrito ? " · " + esc(p.distrito) : ""}</div>
+              <div class="small muted">cumple ${p.edad} años${p.bias ? " · Bias: " + esc(p.bias) : ""}${p.atiny_desde ? " · ATINY desde " + esc(p.atiny_desde) : ""}</div>
             </div>
             <div class="dias"><b>${hoy ? "¡HOY!" : p.dias + " d"}</b>${hoy ? "" : "faltan"}</div>
             ${saludo}
