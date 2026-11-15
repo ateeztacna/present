@@ -630,6 +630,23 @@
           <p class="muted small mb-3" id="credNota">Así se verá tu credencial. Cambia de era con el botón 🎨 y cambia también sus colores.</p>
           <button class="btn btn-line" id="btnDescargar" disabled><i class="bi bi-download"></i> Descargar credencial (PNG)</button>
           <div class="small text-danger mt-2 d-none" id="errorDescarga"></div>
+
+          <!-- Cambiar bias (solo cuando la credencial ya está lista) -->
+          <div class="mt-3 d-none" id="boxCambiarBias">
+            <div class="small muted d-none" id="avisoBiasSinDatos">Para cambiar tu bias, usa primero "Ya me registré: recuperar mi credencial".</div>
+            <div id="zonaCambiarBias">
+              <button class="btn btn-link text-decoration-none p-0" style="color:var(--gold)" data-bs-toggle="collapse" data-bs-target="#panelBias">
+                <i class="bi bi-arrow-left-right"></i> Cambiar mi bias
+              </button>
+              <div class="collapse mt-2" id="panelBias">
+                <div class="panel p-3 mx-auto" style="max-width:380px">
+                  <select class="form-select mb-2" id="cambiarBias"></select>
+                  <button class="btn btn-line w-100" id="btnGuardarBias" type="button">Guardar bias</button>
+                  <div class="small mt-2 d-none" id="msgBias"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1043,6 +1060,8 @@
     const nombresBias = lista.length ? lista.map((m) => m.nombre) : ["Hongjoong", "Seonghwa", "Yunho", "Yeosang", "San", "Mingi", "Wooyoung", "Jongho"];
     const opciones = nombresBias.map((n) => `<option value="${esc(n)}">${esc(n)}</option>`).join("");
     $("bias").innerHTML = `<option value="">Elige a tu favorito...</option>${opciones}<option value="Todos (OT8)">Amo a los ocho 💜 (OT8)</option>`;
+    $("cambiarBias").innerHTML = `${opciones}<option value="Todos (OT8)">Amo a los ocho 💜 (OT8)</option>`;
+    if (credencialActual && credencialActual.bias) $("cambiarBias").value = credencialActual.bias;
   }
 
   function pintarEventos() {
@@ -1264,6 +1283,7 @@
 
   // ---------- Credencial ----------
   let credencialFinal = false;
+  let credencialActual = null;   // datos de la credencial lista (incluye celular y correo, solo en este navegador)
 
   function pintarCredencial(c) {
     const nombre = c.nombre || "Tu nombre";
@@ -1286,11 +1306,59 @@
 
   function mostrarCredencialFinal(c) {
     credencialFinal = true;
+    credencialActual = c;
     pintarCredencial(c);
     $("btnDescargar").disabled = false;
     $("credNota").textContent = "¡Lista! Descárgala y compártela con orgullo ATINY 💜";
     try { localStorage.setItem("ateezCredencial", JSON.stringify(c)); } catch (err) {}
+
+    // Cambiar bias: necesita el celular y el correo con los que se registró
+    const tieneDatos = Boolean(c.celular && c.correo);
+    $("boxCambiarBias").classList.remove("d-none");
+    $("zonaCambiarBias").classList.toggle("d-none", !tieneDatos);
+    $("avisoBiasSinDatos").classList.toggle("d-none", tieneDatos);
+    if (c.bias) $("cambiarBias").value = c.bias;
   }
+
+  $("btnGuardarBias").addEventListener("click", async () => {
+    const msg = $("msgBias");
+    const bias = $("cambiarBias").value;
+    msg.className = "small mt-2 muted";
+    msg.textContent = "Guardando...";
+    $("btnGuardarBias").disabled = true;
+    try {
+      if (!credencialActual || !credencialActual.celular || !credencialActual.correo) throw new Error("Recupera primero tu credencial.");
+      if (!MODO_DEMO) {
+        const control = new AbortController();
+        const corte = setTimeout(() => control.abort(), 20000);
+        let r;
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ accion: "cambiar_bias", celular: credencialActual.celular, correo: credencialActual.correo, bias: bias }),
+            signal: control.signal
+          });
+          r = await res.json();
+        } catch (errRed) {
+          throw new Error("No pudimos confirmar el cambio. Revisa tu conexión e inténtalo de nuevo.");
+        } finally {
+          clearTimeout(corte);
+        }
+        if (!r.ok) throw new Error(r.error || "No se pudo cambiar el bias.");
+      } else {
+        await esperar(500);
+      }
+      mostrarCredencialFinal(Object.assign({}, credencialActual, { bias: bias }));
+      msg.className = "small mt-2 text-success";
+      msg.textContent = "¡Listo! Tu bias ahora es " + bias + ". Ya puedes descargar tu credencial nueva.";
+    } catch (err) {
+      msg.className = "small mt-2 text-danger";
+      msg.textContent = err.message;
+    } finally {
+      $("btnGuardarBias").disabled = false;
+    }
+  });
 
   ["nombres", "apellidos"].forEach((id) => $(id).addEventListener("input", vistaPreviaCredencial));
   $("bias").addEventListener("change", vistaPreviaCredencial);
@@ -1393,7 +1461,7 @@
       $("exitoNombre").textContent = datos.nombres.split(" ")[0];
       form.classList.add("d-none");
       $("exito").classList.remove("d-none");
-      mostrarCredencialFinal({ nombre: datos.nombres + " " + datos.apellidos, bias: datos.bias, numero: respuesta.numero, desde: respuesta.desde });
+      mostrarCredencialFinal({ nombre: datos.nombres + " " + datos.apellidos, bias: datos.bias, numero: respuesta.numero, desde: respuesta.desde, celular: datos.celular, correo: datos.correo });
     } catch (err) {
       $("errorForm").textContent = err.message || "Ocurrió un error. Inténtalo de nuevo.";
       $("errorForm").classList.remove("d-none");
@@ -1421,6 +1489,8 @@
         r = await res.json();
       }
       if (!r.ok) throw new Error(r.error || "No encontramos tu registro.");
+      r.celular = celular;
+      r.correo = correo;
       mostrarCredencialFinal(r);
       document.getElementById("credWrap").scrollIntoView({ behavior: "smooth", block: "center" });
     } catch (err) {
