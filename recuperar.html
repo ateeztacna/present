@@ -391,17 +391,32 @@
       }
     });
 
+    // Si viene de la búsqueda de index.html, ya traemos su credencial (se borra al leerla)
+    function mostrarSiVieneDeIndex() {
+      try {
+        const guardada = JSON.parse(sessionStorage.getItem("ateezRecuperar") || "null");
+        sessionStorage.removeItem("ateezRecuperar");
+        if (!guardada) return;
+        miembro = guardada;
+        pintarCredencial();
+        $("formRecuperar").classList.add("d-none");
+        $("exito").classList.remove("d-none");
+      } catch (err) {}
+    }
+
     // ---------- Inicio ----------
     (async function iniciar() {
       const elegida = leerEraGuardada();
       if (elegida) aplicarTema(elegida);
       DATA = { config: {}, integrantes: DEMO.integrantes };
       pintarDatos();
+      mostrarSiVieneDeIndex();
       try {
         const real = await cargarDatos();
         if (real && real.config) {
           DATA = { config: real.config, integrantes: (real.integrantes && real.integrantes.length) ? real.integrantes : DEMO.integrantes };
           pintarDatos();
+          if (miembro) pintarCredencial();
         }
       } catch (err) { console.error(err); }
       if (!elegida) aplicarTema((DATA.config && DATA.config.comeback_era) || "tacna", false);
