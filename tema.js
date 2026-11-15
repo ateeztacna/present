@@ -1,4 +1,7 @@
-//  TEMAS POR ERA 
+// =====================================================
+//  TEMAS POR ERA (compartido por index.html y registro.html)
+//  Paletas inspiradas en los álbumes de ATEEZ
+// =====================================================
 const ERAS = [
   { id: "tacna", nombre: "Edición Tacna",        sub: "Burdeos y cerámica",       bg: "#0e0000", bg2: "#1f0306", ac: "#9c0512", ac2: "#64090c", gold: "#f8d794", tx: "#efeacd", onAc: "#efeacd" },
   { id: "gh1",   nombre: "Golden Hour : Part.1", sub: "Azul petróleo y oro",      bg: "#0c202e", bg2: "#14384d", ac: "#1d5273", ac2: "#123449", gold: "#c9ad7a", tx: "#f3ecd9", onAc: "#f3ecd9" },
@@ -16,6 +19,25 @@ const ERAS = [
 ];
 
 let eraActual = "tacna";
+
+// Repite una consulta si falla por conexión o demora (no repite si el servidor respondió "no encontrado")
+async function conReintentos(consulta, alReintentar) {
+  const INTENTOS = 3;
+  let ultimoError;
+  for (let i = 1; i <= INTENTOS; i++) {
+    try {
+      return await consulta();
+    } catch (err) {
+      ultimoError = err;
+      if (i < INTENTOS) {
+        if (alReintentar) alReintentar(i + 1, INTENTOS);
+        await new Promise((r) => setTimeout(r, 1500));
+      }
+    }
+  }
+  throw ultimoError;
+}
+
 
 function hexRgb(hex) {
   const n = parseInt(hex.slice(1), 16);
