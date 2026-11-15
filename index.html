@@ -1521,10 +1521,13 @@
         r = await res.json();
       }
       if (!r.ok) throw new Error(r.error || "No encontramos tu registro.");
-      r.celular = celular;
-      r.correo = correo;
-      mostrarCredencialFinal(r);
-      document.getElementById("credWrap").scrollIntoView({ behavior: "smooth", block: "center" });
+      // Si existe, lo llevamos a la página de recuperar (los datos viajan solo en esta pestaña y se borran al leerlos)
+      try {
+        sessionStorage.setItem("ateezRecuperar", JSON.stringify({ nombre: r.nombre, bias: r.bias, numero: r.numero, desde: r.desde, celular: celular, correo: correo }));
+      } catch (err) {}
+      $("btnBuscar").innerHTML = '<span class="spin"></span>Abriendo tu credencial...';
+      buscando = false;
+      window.location.href = "recuperar.html";
     } catch (err) {
       $("errorRecuperar").textContent = err.message;
       $("errorRecuperar").classList.remove("d-none");
