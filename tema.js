@@ -10,7 +10,12 @@ const ERAS = [
   { id: "ityf",  nombre: "Part.3 · In Your Fantasy", sub: "Rojo teatro y negro",  bg: "#060405", bg2: "#1c0508", ac: "#d4121c", ac2: "#7d0a10", gold: "#f4c6c6", tx: "#ffffff", onAc: "#ffffff" },
   { id: "gh4",   nombre: "Golden Hour : Part.4", sub: "Azul medianoche",          bg: "#060e30", bg2: "#0b1b52", ac: "#1f43bd", ac2: "#0c2270", gold: "#a9c1ff", tx: "#f0f4ff", onAc: "#ffffff" },
   { id: "gh5",   nombre: "Golden Hour : Part.5", sub: "Verde esmeralda y plata",  bg: "#05261c", bg2: "#0b3d2d", ac: "#1f9a6e", ac2: "#0f6a4a", gold: "#d5dcd9", tx: "#eefaf4", onAc: "#04150f" },
-  { id: "gh6",   nombre: "Golden Hour : Part.6", sub: "Negro y blanco",           bg: "#000000", bg2: "#161616", ac: "#ededed", ac2: "#5a5a5a", gold: "#ffffff", tx: "#f5f5f5", onAc: "#0a0a0a" }
+  { id: "gh6",   nombre: "Golden Hour : Part.6", sub: "Negro y blanco",           bg: "#000000", bg2: "#161616", ac: "#ededed", ac2: "#5a5a5a", gold: "#ffffff", tx: "#f5f5f5", onAc: "#0a0a0a" },
+  { id: "treasure", nombre: "Treasure",           sub: "Negro y oro pirata",       bg: "#0b0906", bg2: "#1e1710", ac: "#8a6a1f", ac2: "#4d3a10", gold: "#e2b857", tx: "#f4ead2", onAc: "#0b0906" },
+  { id: "fever", nombre: "Zero : Fever",          sub: "Violeta eléctrico y rosa", bg: "#0d0618", bg2: "#1e0b38", ac: "#7a2cff", ac2: "#4a1799", gold: "#ff6ad5", tx: "#f6eaff", onAc: "#ffffff" },
+  { id: "movement", nombre: "The World · Movement", sub: "Azul acero y cian",     bg: "#04101a", bg2: "#0a2233", ac: "#1aa7c9", ac2: "#0e6a82", gold: "#8ee8ff", tx: "#eafaff", onAc: "#04101a" },
+  { id: "outlaw", nombre: "The World · Outlaw", sub: "Cuero y desierto",         bg: "#1a0f06", bg2: "#33200d", ac: "#c8741f", ac2: "#864a10", gold: "#f0c27a", tx: "#fbefdc", onAc: "#1a0f06" },
+  { id: "will",  nombre: "The World · Will",      sub: "Humo y cobre",             bg: "#0f0f10", bg2: "#232122", ac: "#b4552d", ac2: "#6e301a", gold: "#e9b79a", tx: "#f4efec", onAc: "#ffffff" }
 ];
 
 let eraActual = "tacna";
