@@ -178,7 +178,7 @@
   </main>
 
   <footer class="text-center small muted pb-4 px-3">
-    Fan club hecho por fans, sin fines de lucro y oficial, pertenecientes a las sedes de Ateez Perú. Hecho con 💜 en Tacna, Perú.
+    Fan club hecho por fans, sin fines de lucro y no oficial. <span class="nombreGrupo">ATEEZ</span> pertenece a sus dueños (KQ Entertainment). Hecho con 💜 en Tacna, Perú.
   </footer>
 
   <script src="config.js"></script>
@@ -305,7 +305,8 @@
         // Guardamos la credencial para que la página principal la muestre
         try {
           localStorage.setItem("ateezCredencial", JSON.stringify({
-            nombre: datos.nombres + " " + datos.apellidos, bias: datos.bias, numero: respuesta.numero, desde: respuesta.desde
+            nombre: datos.nombres + " " + datos.apellidos, bias: datos.bias, numero: respuesta.numero, desde: respuesta.desde,
+            celular: datos.celular, correo: datos.correo
           }));
         } catch (err) {}
 
