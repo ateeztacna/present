@@ -1,8 +1,2 @@
-// =====================================================
-//  CONFIGURACIÓN COMPARTIDA (index.html y registro.html)
-//  Pega aquí la URL de tu Apps Script:
-//  Implementar > Aplicación web > Copiar URL
-//  Si la dejas así, las páginas corren en MODO DEMO.
-// =====================================================
-const API_URL = "PEGA_AQUI_LA_URL_DE_TU_APPS_SCRIPT";
+const API_URL = "https://script.google.com/macros/s/AKfycbyEmAzTF8OkS7l7KIoP-oJtAtyx2lM0vDNzF9VAWg5qOsUdaiWhJq4_yDSh0fEQffvebw/exec";
 const MODO_DEMO = API_URL.startsWith("PEGA");
