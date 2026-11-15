@@ -590,8 +590,9 @@
 
         <!-- Recuperar credencial -->
         <div class="mt-3">
-          <button class="btn btn-link text-decoration-none p-0" style="color:var(--gold)" data-bs-toggle="collapse" data-bs-target="#boxRecuperar">
-            <i class="bi bi-arrow-repeat"></i> Ya me registré: recuperar mi credencial
+          <p class="muted small mb-2">¿Ya te registraste antes?</p>
+          <button class="btn btn-line" data-bs-toggle="collapse" data-bs-target="#boxRecuperar">
+            <i class="bi bi-arrow-repeat"></i> Recuperar mi credencial
           </button>
           <div class="collapse mt-3" id="boxRecuperar">
             <form id="formRecuperar" class="panel p-3" novalidate>
@@ -637,7 +638,7 @@
 
           <!-- Cambiar bias (solo cuando la credencial ya está lista) -->
           <div class="mt-3 d-none" id="boxCambiarBias">
-            <div class="small muted d-none" id="avisoBiasSinDatos">Por seguridad, para cambiar tu bias vuelve a poner tu celular y correo en "Ya me registré: recuperar mi credencial".</div>
+            <div class="small muted d-none" id="avisoBiasSinDatos">Por seguridad, para cambiar tu bias vuelve a poner tu celular y correo en "Recuperar mi credencial".</div>
             <div id="zonaCambiarBias">
               <button class="btn btn-link text-decoration-none p-0" style="color:var(--gold)" data-bs-toggle="collapse" data-bs-target="#panelBias">
                 <i class="bi bi-arrow-left-right"></i> Cambiar mi bias
@@ -1448,7 +1449,7 @@
         const r = await res2.json();
         if (r.ok) return { ok: true, numero: r.numero, desde: r.desde };
       } catch (err2) {}
-      throw new Error("No pudimos confirmar tu registro. Revisa tu conexión y pulsa \"Ya me registré: recuperar mi credencial\" con tu celular y correo.");
+      throw new Error("No pudimos confirmar tu registro. Revisa tu conexión y pulsa \"Recuperar mi credencial\" con tu celular y correo.");
     } finally {
       clearTimeout(corte);
     }
