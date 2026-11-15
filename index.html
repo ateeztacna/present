@@ -79,6 +79,9 @@
       border-radius: 6px; padding: 12px 28px; letter-spacing: .5px; box-shadow: 0 6px 28px rgba(var(--ac-rgb), .45); transition: .25s; }
     .btn-main:hover { color: var(--on-ac); transform: translateY(-2px); box-shadow: 0 10px 36px rgba(var(--ac-rgb), .7); }
     .btn-line { border: 1px solid var(--gold); color: var(--gold); background: transparent; border-radius: 6px; padding: 11px 26px; font-weight: 700; transition: .25s; }
+    .spin { display:inline-block; width:1em; height:1em; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:giro .7s linear infinite; vertical-align:-.15em; margin-right:.5em; }
+    @keyframes giro { to { transform:rotate(360deg); } }
+    .btn[disabled] { cursor:wait; }
     .btn-line:hover { background: var(--gold); color: var(--bg); }
     .btn-wa { background: #25d366; color: #06230f; font-weight: 800; border: 0; border-radius: 6px; padding: 12px 28px; }
     .btn-wa:hover { background: #3be67d; color: #06230f; transform: translateY(-2px); }
@@ -570,7 +573,7 @@
                 <div class="alert alert-danger d-none" id="errorForm"></div>
                 <button type="submit" class="btn btn-main btn-lg w-100" id="btnEnviar">
                   <span id="btnTexto"><i class="bi bi-person-vcard"></i> Crear mi credencial</span>
-                  <span id="btnCargando" class="d-none"><span class="spinner-border spinner-border-sm"></span> Enviando...</span>
+                  <span id="btnCargando" class="d-none"><span class="spin"></span> Creando tu credencial...</span>
                 </button>
               </div>
             </div>
@@ -594,7 +597,7 @@
               <div class="row g-2">
                 <div class="col-md-5"><input type="tel" class="form-control" id="recCelular" placeholder="Tu celular (9 dígitos)" maxlength="9" inputmode="numeric" required></div>
                 <div class="col-md-5"><input type="email" class="form-control" id="recCorreo" placeholder="Tu correo registrado" required></div>
-                <div class="col-md-2 d-grid"><button class="btn btn-line" type="submit">Buscar</button></div>
+                <div class="col-md-2 d-grid"><button class="btn btn-line" type="submit" id="btnBuscar">Buscar</button></div>
               </div>
               <div class="small mt-2 text-danger d-none" id="errorRecuperar"></div>
             </form>
@@ -1289,6 +1292,18 @@
     setTimeout(() => document.querySelectorAll(".barra i").forEach((b) => (b.style.width = b.dataset.ancho + "%")), 300);
   }
 
+  // Botón "ocupado": muestra un spinner con un texto y bloquea el botón mientras se hace la acción
+  function ocupado(boton, activo, texto) {
+    if (activo) {
+      boton.dataset.html = boton.innerHTML;
+      boton.innerHTML = '<span class="spin"></span>' + texto;
+      boton.disabled = true;
+    } else {
+      if (boton.dataset.html) boton.innerHTML = boton.dataset.html;
+      boton.disabled = false;
+    }
+  }
+
   // ---------- Credencial ----------
   let credencialFinal = false;
   let credencialActual = null;   // datos de la credencial lista (incluye celular y correo, solo en este navegador)
@@ -1331,7 +1346,7 @@
     const bias = $("cambiarBias").value;
     msg.className = "small mt-2 muted";
     msg.textContent = "Guardando...";
-    $("btnGuardarBias").disabled = true;
+    ocupado($("btnGuardarBias"), true, "Guardando...");
     try {
       if (!credencialActual || !credencialActual.celular || !credencialActual.correo) throw new Error("Recupera primero tu credencial.");
       if (!MODO_DEMO) {
@@ -1362,7 +1377,7 @@
       msg.className = "small mt-2 text-danger";
       msg.textContent = err.message;
     } finally {
-      $("btnGuardarBias").disabled = false;
+      ocupado($("btnGuardarBias"), false);
     }
   });
 
@@ -1380,6 +1395,7 @@
 
   $("btnDescargar").addEventListener("click", async () => {
     $("errorDescarga").classList.add("d-none");
+    ocupado($("btnDescargar"), true, "Generando tu credencial...");
     try {
       if (!window.html2canvas) throw new Error("No se cargó la herramienta de descarga.");
       $("cred").style.transform = "";
@@ -1394,6 +1410,8 @@
     } catch (err) {
       $("errorDescarga").textContent = "No se pudo descargar. Toma una captura de pantalla de tu credencial.";
       $("errorDescarga").classList.remove("d-none");
+    } finally {
+      ocupado($("btnDescargar"), false);
     }
   });
 
@@ -1487,9 +1505,12 @@
     $("errorRecuperar").classList.add("d-none");
     const celular = $("recCelular").value.trim();
     const correo = $("recCorreo").value.trim().toLowerCase();
+    let buscando = false;
     try {
       if (!/^9\d{8}$/.test(celular) || !correo) throw new Error("Escribe tu celular (9 dígitos) y tu correo.");
       let r;
+      ocupado($("btnBuscar"), true, "Buscando...");
+      buscando = true;
       if (MODO_DEMO) {
         await esperar(500);
         r = { ok: true, nombre: "Miembro de ejemplo", bias: "San", numero: "TAC-0007", desde: "11/2026" };
@@ -1505,6 +1526,8 @@
     } catch (err) {
       $("errorRecuperar").textContent = err.message;
       $("errorRecuperar").classList.remove("d-none");
+    } finally {
+      if (buscando) ocupado($("btnBuscar"), false);
     }
   });
 
