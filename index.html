@@ -814,7 +814,17 @@
   // paraDescarga = true solo en la credencial: así html2canvas puede incluir la foto en el PNG
   function avatarHTML(nombre, foto, paraDescarga) {
     const cors = paraDescarga ? ' crossorigin="anonymous"' : "";
-    return foto ? `<img src="${esc(foto)}" alt="${esc(nombre)}" loading="lazy"${cors}>` : esc(String(nombre).charAt(0).toUpperCase());
+    return foto ? `<img src="${esc(foto)}" alt="${esc(nombre)}" loading="lazy"${cors} onerror="fotoFallo(this)">` : esc(String(nombre).charAt(0).toUpperCase());
+  }
+
+  // Si la foto no carga: primero se reintenta sin CORS y, si sigue fallando, se muestra la inicial
+  function fotoFallo(img) {
+    if (img.hasAttribute("crossorigin")) {
+      img.removeAttribute("crossorigin");
+      img.src = img.src;
+      return;
+    }
+    img.replaceWith(document.createTextNode(img.alt.charAt(0).toUpperCase()));
   }
 
   let timerCumple = null;
