@@ -304,15 +304,19 @@
           await esperar(800);
           r = { ok: true, nombre: "Miembro de ejemplo", bias: "San", numero: "TAC-0007", desde: "11/2026" };
         } else {
-          const control = new AbortController();
-          const corte = setTimeout(() => control.abort(), 20000);
           try {
-            const res = await fetch(API_URL + "?action=credencial&celular=" + encodeURIComponent(celular) + "&correo=" + encodeURIComponent(correo), { signal: control.signal });
-            r = await res.json();
+            r = await conReintentos(async () => {
+              const control = new AbortController();
+              const corte = setTimeout(() => control.abort(), 15000);
+              try {
+                const res = await fetch(API_URL + "?action=credencial&celular=" + encodeURIComponent(celular) + "&correo=" + encodeURIComponent(correo), { signal: control.signal });
+                return await res.json();
+              } finally {
+                clearTimeout(corte);
+              }
+            }, (n, total) => { $("btnBuscar").innerHTML = '<span class="spin"></span>Reintentando (' + n + ' de ' + total + ')...'; });
           } catch (errRed) {
-            throw new Error("No pudimos conectar. Revisa tu conexión e inténtalo de nuevo.");
-          } finally {
-            clearTimeout(corte);
+            throw new Error("No pudimos conectar con el servidor. Revisa tu conexión y pulsa Buscar de nuevo.");
           }
         }
         if (!r.ok) throw new Error(r.error || "No encontramos tu registro.");
@@ -359,21 +363,25 @@
       ocupado($("btnGuardarBias"), true, "Guardando...");
       try {
         if (!MODO_DEMO) {
-          const control = new AbortController();
-          const corte = setTimeout(() => control.abort(), 20000);
           let r;
           try {
-            const res = await fetch(API_URL, {
-              method: "POST",
-              headers: { "Content-Type": "text/plain;charset=utf-8" },
-              body: JSON.stringify({ accion: "cambiar_bias", celular: miembro.celular, correo: miembro.correo, bias: bias }),
-              signal: control.signal
-            });
-            r = await res.json();
+            r = await conReintentos(async () => {
+              const control = new AbortController();
+              const corte = setTimeout(() => control.abort(), 15000);
+              try {
+                const res = await fetch(API_URL, {
+                  method: "POST",
+                  headers: { "Content-Type": "text/plain;charset=utf-8" },
+                  body: JSON.stringify({ accion: "cambiar_bias", celular: miembro.celular, correo: miembro.correo, bias: bias }),
+                  signal: control.signal
+                });
+                return await res.json();
+              } finally {
+                clearTimeout(corte);
+              }
+            }, (n, total) => { $("btnGuardarBias").innerHTML = '<span class="spin"></span>Reintentando (' + n + ' de ' + total + ')...'; });
           } catch (errRed) {
-            throw new Error("No pudimos confirmar el cambio. Inténtalo de nuevo.");
-          } finally {
-            clearTimeout(corte);
+            throw new Error("No pudimos confirmar el cambio. Revisa tu conexión e inténtalo de nuevo.");
           }
           if (!r.ok) throw new Error(r.error || "No se pudo cambiar el bias.");
         } else {
