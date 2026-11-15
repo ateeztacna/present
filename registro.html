@@ -437,6 +437,7 @@
 
     // ---------- Inicio ----------
     (async function iniciar() {
+      const repintarEras = montarSelectorEra();
       // Se aplica la era que la persona eligió antes; si no, se ajusta cuando lleguen los datos
       const elegida = leerEraGuardada();
       if (elegida) aplicarTema(elegida);
@@ -455,7 +456,7 @@
         }
       } catch (err) { console.error(err); }
 
-      if (!elegida) aplicarTema((DATA.config && DATA.config.comeback_era) || "tacna", false);
+      if (!elegida) { aplicarTema((DATA.config && DATA.config.comeback_era) || "tacna", false); repintarEras(); }
     })();
   </script>
 </body>
