@@ -228,9 +228,10 @@
       </div>
     </div>
 
-    <p class="text-center small muted mt-4">
-      ¿Ya te registraste? <a class="volver" href="index.html#unete">Recupera tu credencial aquí</a>
-    </p>
+    <div class="text-center mt-4">
+      <p class="muted small mb-2">¿Ya te registraste antes?</p>
+      <a href="recuperar.html" class="btn btn-line"><i class="bi bi-arrow-repeat"></i> Recuperar mi credencial</a>
+    </div>
   </main>
 
   <footer class="text-center small muted pb-4 px-3">
@@ -319,7 +320,7 @@
         const r = await res2.json();
         if (r.ok) return { ok: true, numero: r.numero, desde: r.desde };
       } catch (err2) {}
-      throw new Error("No pudimos confirmar tu registro. Revisa tu conexión y pulsa \"Ya me registré: recuperar mi credencial\" con tu celular y correo.");
+      throw new Error("No pudimos confirmar tu registro. Revisa tu conexión y pulsa \"Recuperar mi credencial\" con tu celular y correo.");
     } finally {
       clearTimeout(corte);
     }
@@ -360,7 +361,7 @@
         mostrarExito({ nombre: datos.nombres + " " + datos.apellidos, bias: datos.bias, numero: respuesta.numero, desde: respuesta.desde });
       } catch (err) {
         $("errorForm").innerHTML = esc(err.message || "Ocurrió un error. Inténtalo de nuevo.") +
-          ' <a class="alert-link" href="index.html#unete">Recuperar mi credencial</a>';
+          ' <a class="alert-link" href="recuperar.html">Recuperar mi credencial</a>';
         $("errorForm").classList.remove("d-none");
         $("btnTexto").classList.remove("d-none");
         $("btnCargando").classList.add("d-none");
