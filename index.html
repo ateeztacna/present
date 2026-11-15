@@ -494,7 +494,7 @@
     <div class="wa-band">
       <i class="bi bi-whatsapp" style="font-size:3rem;color:#25d366"></i>
       <h3 class="mt-2" style="font-size:2.2rem">Únete a nuestro grupo de WhatsApp</h3>
-      <p class="muted mb-4">Avisos, proyectos de streaming, memes y mucho amor por <span class="nombreGrupo">ATEEZ</span>. Únete ahora.</p>
+      <p class="muted mb-4">Avisos, proyectos de streaming, memes y mucho amor por <span class="nombreGrupo">ATEEZ</span>. Entra directo, sin formulario.</p>
       <a href="#" class="btn btn-wa btn-lg linkWhatsApp" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i> Entrar al grupo</a>
     </div>
   </div>
@@ -1352,21 +1352,25 @@
     try {
       if (!credencialActual || !credencialActual.celular || !credencialActual.correo) throw new Error("Recupera primero tu credencial.");
       if (!MODO_DEMO) {
-        const control = new AbortController();
-        const corte = setTimeout(() => control.abort(), 20000);
         let r;
         try {
-          const res = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ accion: "cambiar_bias", celular: credencialActual.celular, correo: credencialActual.correo, bias: bias }),
-            signal: control.signal
-          });
-          r = await res.json();
+          r = await conReintentos(async () => {
+            const control = new AbortController();
+            const corte = setTimeout(() => control.abort(), 15000);
+            try {
+              const res = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ accion: "cambiar_bias", celular: credencialActual.celular, correo: credencialActual.correo, bias: bias }),
+                signal: control.signal
+              });
+              return await res.json();
+            } finally {
+              clearTimeout(corte);
+            }
+          }, (n, total) => { $("btnGuardarBias").innerHTML = '<span class="spin"></span>Reintentando (' + n + ' de ' + total + ')...'; });
         } catch (errRed) {
           throw new Error("No pudimos confirmar el cambio. Revisa tu conexión e inténtalo de nuevo.");
-        } finally {
-          clearTimeout(corte);
         }
         if (!r.ok) throw new Error(r.error || "No se pudo cambiar el bias.");
       } else {
@@ -1517,8 +1521,20 @@
         await esperar(500);
         r = { ok: true, nombre: "Miembro de ejemplo", bias: "San", numero: "TAC-0007", desde: "11/2026" };
       } else {
-        const res = await fetch(API_URL + "?action=credencial&celular=" + encodeURIComponent(celular) + "&correo=" + encodeURIComponent(correo));
-        r = await res.json();
+        try {
+          r = await conReintentos(async () => {
+            const control = new AbortController();
+            const corte = setTimeout(() => control.abort(), 15000);
+            try {
+              const res = await fetch(API_URL + "?action=credencial&celular=" + encodeURIComponent(celular) + "&correo=" + encodeURIComponent(correo), { signal: control.signal });
+              return await res.json();
+            } finally {
+              clearTimeout(corte);
+            }
+          }, (n, total) => { $("btnBuscar").innerHTML = '<span class="spin"></span>Reintentando (' + n + ' de ' + total + ')...'; });
+        } catch (errRed) {
+          throw new Error("No pudimos conectar con el servidor. Revisa tu conexión y pulsa Buscar de nuevo.");
+        }
       }
       if (!r.ok) throw new Error(r.error || "No encontramos tu registro.");
       // Si existe, lo llevamos a la página de recuperar (los datos viajan solo en esta pestaña y se borran al leerlos)
