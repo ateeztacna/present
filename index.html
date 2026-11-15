@@ -532,11 +532,6 @@
                 </div>
               </div>
               <div class="col-md-6">
-                <label class="form-label" for="nombreWhatsapp">Nombre en WhatsApp *</label>
-                <input type="text" class="form-control" id="nombreWhatsapp" placeholder="Cómo apareces en WhatsApp" required maxlength="60">
-                <div class="invalid-feedback">Escribe tu nombre de WhatsApp.</div>
-              </div>
-              <div class="col-md-6">
                 <label class="form-label" for="fechaNacimiento">Fecha de nacimiento *</label>
                 <input type="date" class="form-control" id="fechaNacimiento" required min="1940-01-01">
                 <div class="invalid-feedback">Elige tu fecha de nacimiento.</div>
@@ -1324,6 +1319,26 @@
   $("celular").addEventListener("input", (e) => (e.target.value = e.target.value.replace(/\D/g, "")));
   $("recCelular").addEventListener("input", (e) => (e.target.value = e.target.value.replace(/\D/g, "")));
 
+  // Envía el registro. Si la respuesta no llega, revisamos si igual se guardó
+  async function enviarRegistro(datos) {
+    const control = new AbortController();
+    const corte = setTimeout(() => control.abort(), 20000);
+    try {
+      // text/plain evita el preflight de CORS con Apps Script
+      const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(datos), signal: control.signal });
+      return await res.json();
+    } catch (err) {
+      try {
+        const res2 = await fetch(API_URL + "?action=credencial&celular=" + encodeURIComponent(datos.celular) + "&correo=" + encodeURIComponent(datos.correo));
+        const r = await res2.json();
+        if (r.ok) return { ok: true, numero: r.numero, desde: r.desde };
+      } catch (err2) {}
+      throw new Error("No pudimos confirmar tu registro. Revisa tu conexión y pulsa \"Ya me registré: recuperar mi credencial\" con tu celular y correo.");
+    } finally {
+      clearTimeout(corte);
+    }
+  }
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     $("errorForm").classList.add("d-none");
@@ -1333,7 +1348,6 @@
       nombres: $("nombres").value.trim(),
       apellidos: $("apellidos").value.trim(),
       celular: $("celular").value.trim(),
-      nombre_whatsapp: $("nombreWhatsapp").value.trim(),
       fecha_nacimiento: $("fechaNacimiento").value,
       edad: calcularEdad($("fechaNacimiento").value),
       correo: $("correo").value.trim().toLowerCase(),
@@ -1353,9 +1367,7 @@
         const hoy = new Date();
         respuesta = { ok: true, numero: "TAC-0034", desde: String(hoy.getMonth() + 1).padStart(2, "0") + "/" + hoy.getFullYear() };
       } else {
-        // text/plain evita el preflight de CORS con Apps Script
-        const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(datos) });
-        respuesta = await res.json();
+        respuesta = await enviarRegistro(datos);
       }
       if (!respuesta.ok) throw new Error(respuesta.error || "No se pudo completar el registro.");
 
