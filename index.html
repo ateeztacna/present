@@ -411,9 +411,9 @@
 <section id="eras">
   <div class="container">
     <div class="text-center mb-5 reveal">
-      <span class="eyebrow">Golden Hour</span>
+      <span class="eyebrow">De Treasure a Golden Hour</span>
       <h2 class="sec-title">Elige tu <em>era</em></h2>
-      <p class="sec-sub mx-auto">Cada era tuvo su logo y su paleta. Toca una y la página entera se viste con sus colores (incluso tu credencial).</p>
+      <p class="sec-sub mx-auto">Cada era de ATEEZ tuvo su propio mundo y su paleta. Toca una y la página entera se viste con sus colores (incluso tu credencial).</p>
     </div>
     <div class="row g-4" id="listaEras"></div>
   </div>
@@ -1104,12 +1104,12 @@
       const fila = extra.find((x) => x.id === e.id) || {};
       const logo = fila.logo_url
         ? `<img src="${esc(fila.logo_url)}" alt="Logo ${esc(e.nombre)}" loading="lazy">`
-        : `<span style="color:${e.gold}">Logo de esta era<br>(súbelo en la hoja Eras)</span>`;
+        : "";
       return `
         <div class="col-6 col-lg-3">
           <div class="era ${e.id === eraActual ? "activa" : ""}" data-era="${e.id}" style="background:linear-gradient(145deg,${e.bg2},${e.bg});border-color:${e.gold}66;color:${e.tx}">
             <span class="en-uso">EN USO</span>
-            <div class="logo-slot" style="border-color:${e.gold}55">${logo}</div>
+            ${logo ? `<div class="logo-slot" style="border-color:${e.gold}55">${logo}</div>` : ""}
             <div class="swatches"><i style="background:${e.bg2}"></i><i style="background:${e.ac}"></i><i style="background:${e.gold}"></i><i style="background:${e.tx}"></i></div>
             <h5 style="color:${e.gold}">${esc(e.nombre)}</h5>
             <small>${esc(e.sub)}${fila.lanzamiento ? " · " + esc(fila.lanzamiento) : ""}</small>
