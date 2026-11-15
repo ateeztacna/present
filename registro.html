@@ -304,9 +304,8 @@
 
         // Guardamos la credencial para que la página principal la muestre
         try {
-          localStorage.setItem("ateezCredencial", JSON.stringify({
-            nombre: datos.nombres + " " + datos.apellidos, bias: datos.bias, numero: respuesta.numero, desde: respuesta.desde,
-            celular: datos.celular, correo: datos.correo
+          sessionStorage.setItem("ateezCredencial", JSON.stringify({
+            nombre: datos.nombres + " " + datos.apellidos, bias: datos.bias, numero: respuesta.numero, desde: respuesta.desde
           }));
         } catch (err) {}
 
