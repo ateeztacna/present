@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Staff · ATINY Tacna</title>
+  <link rel="icon" type="image/svg+xml" href="icono.svg">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#0e0000" id="metaTema">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;1,700;1,800&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0e0000;  --bg2: #1f0306;
+      --ac: #9c0512;  --ac2: #64090c;
+      --gold: #f8d794; --tx: #efeacd; --on-ac: #efeacd;
+      --bg-rgb: 14,0,0; --ac-rgb: 156,5,18; --gold-rgb: 248,215,148; --tx-rgb: 239,234,205;
+      --muted: rgba(var(--tx-rgb), .68);
+      --line: rgba(var(--gold-rgb), .22);
+      --card: rgba(var(--tx-rgb), .05);
+      --display: 'Barlow Condensed', sans-serif;
+      --serif: 'Cormorant Garamond', serif;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--tx); min-height: 100vh; }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1; opacity: .22;
+      background: radial-gradient(ellipse at 50% 0%, rgba(var(--ac-rgb), .6), transparent 60%),
+                  repeating-linear-gradient(90deg, rgba(var(--ac-rgb), .5) 0 26px, rgba(var(--bg-rgb), .9) 26px 52px);
+      -webkit-mask-image: linear-gradient(180deg, #000, transparent 70%); mask-image: linear-gradient(180deg, #000, transparent 70%); }
+    h1, h2, h3, .display { font-family: var(--display); font-style: italic; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; }
+    .eyebrow { color: var(--gold); font-weight: 700; font-size: .75rem; letter-spacing: 4px; text-transform: uppercase; }
+    .muted { color: var(--muted); }
+    .brand { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 1.7rem; color: var(--tx); text-decoration: none; line-height: 1; }
+    .brand small { display: block; font-family: 'DM Sans', sans-serif; font-style: normal; font-weight: 700; font-size: .58rem; letter-spacing: 4px; color: var(--gold); }
+
+    .btn-main { background: linear-gradient(100deg, var(--ac), var(--ac2)); color: var(--on-ac); border: 1px solid rgba(var(--gold-rgb), .4); font-weight: 700; border-radius: 6px; padding: 10px 24px; box-shadow: 0 6px 24px rgba(var(--ac-rgb), .4); }
+    .btn-main:hover { color: var(--on-ac); transform: translateY(-2px); }
+    .btn-line { border: 1px solid var(--gold); color: var(--gold); background: transparent; border-radius: 6px; padding: 7px 16px; font-weight: 700; font-size: .88rem; text-decoration: none; display: inline-block; }
+    .btn-line:hover { background: var(--gold); color: var(--bg); }
+    .btn-wa { background: #25d366; color: #06230f; font-weight: 800; border: 0; border-radius: 6px; padding: 6px 14px; font-size: .85rem; text-decoration: none; display: inline-block; white-space: nowrap; }
+    .btn-wa:hover { background: #3be67d; color: #06230f; }
+
+    .panel { background: rgba(var(--bg-rgb), .75); border: 1px solid var(--line); border-radius: 14px; }
+    .form-control { background-color: rgba(var(--tx-rgb), .06); border: 1px solid var(--line); border-radius: 8px; padding: 11px 14px; color: var(--tx); }
+    .form-control:focus { background-color: rgba(var(--tx-rgb), .1); border-color: var(--gold); box-shadow: 0 0 0 .2rem rgba(var(--gold-rgb), .2); color: var(--tx); }
+    .chip { border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 50px; padding: 6px 18px; font-weight: 500; font-size: .88rem; }
+    .chip.active, .chip:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+
+    .stat { text-align: center; padding: 16px 8px; }
+    .stat b { display: block; font-family: var(--display); font-style: italic; font-size: 2.2rem; color: var(--gold); line-height: 1; }
+    .stat span { font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
+    .fila { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+    .fila:last-child { border-bottom: 0; }
+    .fila.hoy { background: rgba(var(--gold-rgb), .12); }
+    .fecha-box { min-width: 58px; text-align: center; border-radius: 10px; padding: 6px; background: linear-gradient(135deg, var(--ac), var(--ac2)); color: var(--on-ac); }
+    .fecha-box b { display: block; font-family: var(--display); font-style: italic; font-size: 1.5rem; line-height: 1; }
+    .fecha-box span { font-size: .65rem; letter-spacing: 2px; }
+    .fecha-box.ateez { background: linear-gradient(135deg, var(--gold), var(--tx)); color: var(--bg); }
+    .etiqueta { display: inline-block; font-size: .68rem; padding: 2px 10px; border: 1px solid var(--line); border-radius: 50px; color: var(--gold); margin-left: 6px; }
+    .dias { margin-left: auto; text-align: right; font-size: .8rem; color: var(--muted); white-space: nowrap; }
+    .dias b { display: block; font-family: var(--display); font-style: italic; font-size: 1.3rem; color: var(--gold); line-height: 1.1; }
+
+    .tira { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .mes { border: 1px solid var(--line); border-radius: 12px; padding: 12px; min-height: 120px; background: var(--card); font-size: .84rem; }
+    .mes.actual { border-color: var(--gold); box-shadow: 0 0 18px rgba(var(--gold-rgb), .3); }
+    .mes h6 { font-family: var(--display); font-style: italic; font-weight: 800; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
+    .mes div { padding: 2px 0; line-height: 1.35; }
+    .mes .ateez { color: var(--gold); }
+    @media (max-width: 991px) { .tira { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 575px) { .tira { grid-template-columns: 1fr; } .fila { flex-wrap: wrap; } .dias { margin-left: 72px; text-align: left; } }
+  </style>
+</head>
+
+<body>
+  <header class="container py-3 d-flex justify-content-between align-items-center">
+    <a class="brand" href="index.html">ATEEZ<small>STAFF · ATINY TACNA</small></a>
+    <div class="d-flex gap-2">
+      <a class="btn-line" href="index.html"><i class="bi bi-house"></i> Página principal</a>
+      <button class="btn-line d-none" id="btnSalir"><i class="bi bi-box-arrow-right"></i> Salir</button>
+    </div>
+  </header>
+
+  <!-- ===== Acceso ===== -->
+  <main class="container pb-5" id="vistaLogin" style="max-width:460px">
+    <div class="panel p-4 mt-4 text-center">
+      <div style="font-size:2.6rem">🔒</div>
+      <h1 class="mt-1" style="font-size:2.4rem">Zona del staff</h1>
+      <p class="muted">Calendario de cumpleaños del fan club. Ingresa la clave del staff.</p>
+      <form id="formLogin">
+        <input type="password" class="form-control mb-3" id="clave" placeholder="Clave del staff" autocomplete="current-password" required>
+        <div class="alert alert-danger py-2 d-none" id="errorLogin"></div>
+        <button class="btn btn-main w-100" id="btnEntrar" type="submit">
+          <span id="entrarTexto">Entrar</span>
+          <span id="entrarCargando" class="d-none"><span class="spinner-border spinner-border-sm"></span> Verificando...</span>
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <!-- ===== Calendario ===== -->
+  <main class="container pb-5 d-none" id="vistaStaff">
+    <div class="pt-3 pb-3">
+      <div class="eyebrow">Solo staff</div>
+      <h1 style="font-size:clamp(2.4rem, 7vw, 3.8rem); line-height: .95">Calendario de <span style="color:var(--gold)">cumpleaños</span></h1>
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-4"><div class="panel stat"><b id="stTotal">0</b><span>Miembros</span></div></div>
+      <div class="col-4"><div class="panel stat"><b id="stMes">0</b><span>Cumplen este mes</span></div></div>
+      <div class="col-4"><div class="panel stat"><b id="stProximo">-</b><span>Próximo</span></div></div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+      <button class="chip active" data-vista="proximos">Próximos</button>
+      <button class="chip" data-vista="calendario">Calendario del año</button>
+      <div class="form-check form-switch ms-auto mb-0">
+        <input class="form-check-input" type="checkbox" id="verAteez" checked>
+        <label class="form-check-label small" for="verAteez">Incluir cumples de ATEEZ</label>
+      </div>
+    </div>
+
+    <!-- Próximos -->
+    <div id="vistaProximos">
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        <input type="search" class="form-control" id="buscar" placeholder="Buscar por nombre o bias..." style="max-width:340px">
+        <button class="btn-line" id="btnCopiarMes"><i class="bi bi-clipboard"></i> Copiar lista del mes</button>
+        <span class="small text-success align-self-center d-none" id="copiado">¡Copiada!</span>
+      </div>
+      <div class="panel" id="listaProximos"></div>
+    </div>
+
+    <!-- Calendario del año -->
+    <div id="vistaCalendario" class="d-none"><div class="tira" id="tiraAnual"></div></div>
+
+    <p class="small muted mt-4"><i class="bi bi-shield-lock"></i> Estos datos son privados: no compartas capturas ni los números de celular fuera del staff.</p>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="tema.js"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const meses = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+    const mesesLargos = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    const CLAVE_DEMO = "staff";
+
+    let personas = [];   // fans + integrantes de ATEEZ, con su próximo cumple calculado
+    let vistaActual = "proximos";
+
+    function esc(texto) {
+      const div = document.createElement("div");
+      div.textContent = texto == null ? "" : texto;
+      return div.innerHTML;
+    }
+
+    // ---------- Fechas ----------
+    function proximoCumple(texto) {
+      const p = String(texto).split("-").map(Number); // [año, mes, día]
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+      let prox = new Date(hoy.getFullYear(), p[1] - 1, p[2]);
+      if (prox < hoy) prox = new Date(hoy.getFullYear() + 1, p[1] - 1, p[2]);
+      return { fecha: prox, dias: Math.round((prox - hoy) / 86400000), edad: prox.getFullYear() - p[0], mes: p[1] - 1, dia: p[2] };
+    }
+
+    // ---------- Datos ----------
+    function datosDemo() {
+      const hace = (anios, dias) => {
+        const f = new Date(Date.now() + dias * 86400000);
+        return (f.getFullYear() - anios) + "-" + String(f.getMonth() + 1).padStart(2, "0") + "-" + String(f.getDate()).padStart(2, "0");
+      };
+      return {
+        integrantes: [
+          { nombre: "Wooyoung", cumple: "1999-11-26" }, { nombre: "Jongho", cumple: "2000-10-12" },
+          { nombre: "Hongjoong", cumple: "1998-11-07" }, { nombre: "Seonghwa", cumple: "1998-04-03" }
+        ],
+        miembros: [
+          { nombre: "María Fernanda Quispe", celular: "987654321", bias: "San", atiny_desde: "2019", fecha_nacimiento: hace(18, 0) },
+          { nombre: "Camila Mamani Ríos", celular: "955123456", bias: "Wooyoung", atiny_desde: "2020", fecha_nacimiento: hace(21, 4) },
+          { nombre: "Lucía Condori", celular: "944333222", bias: "Hongjoong", atiny_desde: "2018", fecha_nacimiento: hace(16, 11) },
+          { nombre: "Valeria Choque", celular: "933111000", bias: "Jongho", atiny_desde: "", fecha_nacimiento: hace(25, 40) },
+          { nombre: "Ana Paola Flores", celular: "922000111", bias: "Mingi", atiny_desde: "2022", fecha_nacimiento: hace(19, 95) }
+        ]
+      };
+    }
+
+    async function pedirDatos(clave) {
+      if (MODO_DEMO) {
+        if (clave !== CLAVE_DEMO) throw new Error("Clave incorrecta. (Modo demo: la clave es \"staff\")");
+        return datosDemo();
+      }
+      // Cumpleaños de ATEEZ: es información pública
+      const pub = await (await fetch(API_URL + "?action=data")).json();
+      // Datos de los miembros: el servidor los entrega solo si la clave es correcta
+      const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ accion: "staff", clave: clave }) });
+      const privado = await res.json();
+      if (!privado.ok) throw new Error(privado.error || "No se pudo entrar.");
+      return { integrantes: pub.integrantes || [], miembros: privado.miembros || [] };
+    }
+
+    function armarPersonas(datos) {
+      const fans = (datos.miembros || []).filter((m) => m.fecha_nacimiento).map((m) =>
+        Object.assign({ tipo: "fan" }, m, proximoCumple(m.fecha_nacimiento)));
+      const ateez = (datos.integrantes || []).filter((m) => m.cumple).map((m) =>
+        Object.assign({ tipo: "ateez", nombre: m.nombre }, proximoCumple(m.cumple)));
+      personas = fans.concat(ateez).sort((a, b) => a.dias - b.dias);
+    }
+
+    // ---------- Pintar ----------
+    function visibles() {
+      const texto = $("buscar").value.trim().toLowerCase();
+      return personas
+        .filter((p) => $("verAteez").checked || p.tipo === "fan")
+        .filter((p) => (p.nombre + " " + (p.bias || "")).toLowerCase().indexOf(texto) !== -1);
+    }
+
+    function mensajeSaludo(p) {
+      return "¡Hola " + p.nombre.split(" ")[0] + "! 🎂💜 De parte de todo el staff de ATINY Tacna te deseamos un feliz cumpleaños " + p.edad + ". ¡Que la pases increíble!";
+    }
+
+    function pintarProximos() {
+      const lista = visibles();
+      if (lista.length === 0) { $("listaProximos").innerHTML = `<div class="p-4 muted text-center">No hay resultados.</div>`; return; }
+
+      $("listaProximos").innerHTML = lista.map((p) => {
+        const hoy = p.dias === 0;
+        const saludo = p.tipo === "fan" && p.celular
+          ? `<a class="btn-wa" target="_blank" rel="noopener" href="https://wa.me/51${esc(p.celular)}?text=${encodeURIComponent(mensajeSaludo(p))}"><i class="bi bi-whatsapp"></i> Saludar</a>` : "";
+        return `
+          <div class="fila ${hoy ? "hoy" : ""}">
+            <div class="fecha-box ${p.tipo === "ateez" ? "ateez" : ""}"><b>${p.dia}</b><span>${meses[p.mes]}</span></div>
+            <div>
+              <div class="fw-semibold">${p.tipo === "ateez" ? "🎂 " : ""}${esc(p.nombre)}${p.tipo === "ateez" ? '<span class="etiqueta">ATEEZ</span>' : ""}</div>
+              <div class="small muted">cumple ${p.edad} años${p.bias ? " · Bias: " + esc(p.bias) : ""}${p.atiny_desde ? " · ATINY desde " + esc(p.atiny_desde) : ""}</div>
+            </div>
+            <div class="dias"><b>${hoy ? "¡HOY!" : p.dias + " d"}</b>${hoy ? "" : "faltan"}</div>
+            ${saludo}
+          </div>`;
+      }).join("");
+    }
+
+    function pintarCalendario() {
+      const mesHoy = new Date().getMonth();
+      let html = "";
+      for (let i = 0; i < 12; i++) {
+        const delMes = visibles().filter((p) => p.mes === i).sort((a, b) => a.dia - b.dia);
+        const filas = delMes.map((p) =>
+          `<div class="${p.tipo === "ateez" ? "ateez" : ""}"><b>${p.dia}</b> · ${p.tipo === "ateez" ? "🎂 " : ""}${esc(p.nombre)}</div>`).join("");
+        html += `<div class="mes ${i === mesHoy ? "actual" : ""}"><h6>${mesesLargos[i]} <span class="muted" style="font-size:.8rem">(${delMes.length})</span></h6>${filas || '<div class="muted">—</div>'}</div>`;
+      }
+      $("tiraAnual").innerHTML = html;
+    }
+
+    function pintarResumen() {
+      const mesHoy = new Date().getMonth();
+      const fans = personas.filter((p) => p.tipo === "fan");
+      $("stTotal").textContent = fans.length;
+      $("stMes").textContent = fans.filter((p) => p.mes === mesHoy).length;
+      $("stProximo").textContent = fans.length ? (fans[0].dias === 0 ? "HOY" : fans[0].dias + " d") : "-";
+    }
+
+    function pintarTodo() {
+      pintarResumen();
+      pintarProximos();
+      pintarCalendario();
+    }
+
+    // ---------- Eventos ----------
+    document.querySelectorAll("[data-vista]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-vista]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        vistaActual = btn.dataset.vista;
+        $("vistaProximos").classList.toggle("d-none", vistaActual !== "proximos");
+        $("vistaCalendario").classList.toggle("d-none", vistaActual !== "calendario");
+      });
+    });
+    $("buscar").addEventListener("input", pintarTodo);
+    $("verAteez").addEventListener("change", pintarTodo);
+
+    $("btnCopiarMes").addEventListener("click", async () => {
+      const mesHoy = new Date().getMonth();
+      const lineas = personas.filter((p) => p.tipo === "fan" && p.mes === mesHoy).sort((a, b) => a.dia - b.dia)
+        .map((p) => p.dia + " de " + mesesLargos[p.mes].toLowerCase() + " - " + p.nombre + " (" + p.edad + ")");
+      const texto = "🎂 Cumpleaños de " + mesesLargos[mesHoy] + "\n" + (lineas.join("\n") || "Nadie cumple este mes");
+      try { await navigator.clipboard.writeText(texto); $("copiado").classList.remove("d-none"); } catch (err) { prompt("Copia esta lista:", texto); }
+    });
+
+    // ---------- Acceso ----------
+    async function entrar(clave, silencioso) {
+      $("errorLogin").classList.add("d-none");
+      $("entrarTexto").classList.add("d-none");
+      $("entrarCargando").classList.remove("d-none");
+      $("btnEntrar").disabled = true;
+      try {
+        const datos = await pedirDatos(clave);
+        armarPersonas(datos);
+        pintarTodo();
+        try { sessionStorage.setItem("claveStaff", clave); } catch (err) {}
+        $("vistaLogin").classList.add("d-none");
+        $("vistaStaff").classList.remove("d-none");
+        $("btnSalir").classList.remove("d-none");
+      } catch (err) {
+        try { sessionStorage.removeItem("claveStaff"); } catch (e2) {}
+        if (!silencioso) {
+          $("errorLogin").textContent = err.message || "No se pudo entrar.";
+          $("errorLogin").classList.remove("d-none");
+        }
+      } finally {
+        $("entrarTexto").classList.remove("d-none");
+        $("entrarCargando").classList.add("d-none");
+        $("btnEntrar").disabled = false;
+      }
+    }
+
+    $("formLogin").addEventListener("submit", (e) => {
+      e.preventDefault();
+      entrar($("clave").value, false);
+    });
+
+    $("btnSalir").addEventListener("click", () => {
+      try { sessionStorage.removeItem("claveStaff"); } catch (err) {}
+      location.reload();
+    });
+
+    // ---------- Inicio ----------
+    (function iniciar() {
+      const elegida = leerEraGuardada();
+      aplicarTema(elegida || "tacna", false);
+      let guardada = null;
+      try { guardada = sessionStorage.getItem("claveStaff"); } catch (err) {}
+      if (guardada) entrar(guardada, true);
+    })();
+  </script>
+</body>
+</html>

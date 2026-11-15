@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ATEEZ Fan Club Tacna · ATINY</title>
+  <link rel="icon" type="image/svg+xml" href="icono.svg">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="description" content="ATINY Tacna: fan club de ATEEZ en Tacna, Perú. Cumpleaños, eras, videos, galería, redes y credencial de miembro.">
+  <meta name="theme-color" content="#0e0000" id="metaTema">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;1,700;1,800&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============ TEMA (se cambia desde "Elige tu era") ============ */
+    :root {
+      --bg: #0e0000;  --bg2: #1f0306;
+      --ac: #9c0512;  --ac2: #64090c;
+      --gold: #f8d794; --tx: #efeacd; --on-ac: #efeacd;
+      --bg-rgb: 14,0,0; --ac-rgb: 156,5,18; --gold-rgb: 248,215,148; --tx-rgb: 239,234,205;
+      --muted: rgba(var(--tx-rgb), .68);
+      --line: rgba(var(--gold-rgb), .22);
+      --card: rgba(var(--tx-rgb), .05);
+      --display: 'Barlow Condensed', sans-serif;
+      --serif: 'Cormorant Garamond', serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--tx); overflow-x: hidden; transition: background .5s; }
+    section { padding: 96px 0; position: relative; scroll-margin-top: 60px; }
+    .alt-bg { background: linear-gradient(180deg, var(--bg), var(--bg2) 50%, var(--bg)); }
+    .muted { color: var(--muted); }
+
+    h1, h2, h3, .display { font-family: var(--display); font-style: italic; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; }
+    .serif { font-family: var(--serif); font-style: italic; font-weight: 500; }
+    .eyebrow { color: var(--gold); font-weight: 700; font-size: .78rem; letter-spacing: 4px; text-transform: uppercase; }
+    .sec-title { font-size: clamp(2.2rem, 6vw, 4rem); line-height: .95; margin: 8px 0 14px; }
+    .sec-title em { font-family: var(--serif); font-weight: 500; text-transform: none; color: var(--gold); }
+    .sec-sub { color: var(--muted); max-width: 620px; }
+
+    /* ============ Carga de datos ============ */
+    .skel { position: relative; overflow: hidden; border-radius: 12px; background: rgba(var(--tx-rgb), .07); min-height: 18px; }
+    .skel::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(var(--tx-rgb), .14), transparent); animation: brillo 1.3s infinite; }
+    @keyframes brillo { to { transform: translateX(100%); } }
+    .skel-card { height: 230px; }
+    .skel-video { height: 190px; }
+    .skel-foto { height: 180px; }
+    .skel-fila { height: 56px; margin-bottom: 10px; }
+    .skel-evento { height: 84px; }
+    .skel-spot { height: 260px; }
+    .aparece > * { animation: aparece .55s ease both; }
+    .aparece > *:nth-child(2) { animation-delay: .06s; } .aparece > *:nth-child(3) { animation-delay: .12s; }
+    .aparece > *:nth-child(4) { animation-delay: .18s; } .aparece > *:nth-child(5) { animation-delay: .24s; }
+    .aparece > *:nth-child(6) { animation-delay: .30s; } .aparece > *:nth-child(7) { animation-delay: .36s; }
+    .aparece > *:nth-child(n+8) { animation-delay: .42s; }
+    @keyframes aparece { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    #barraCarga { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 2000; background: linear-gradient(90deg, var(--ac), var(--gold)); box-shadow: 0 0 10px var(--gold); transition: width .4s ease, opacity .4s; }
+    #avisoCarga { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 2000; background: rgba(var(--bg-rgb), .92); border: 1px solid var(--line); border-radius: 50px; padding: 8px 18px; font-size: .85rem; color: var(--gold); display: none; align-items: center; gap: 8px; white-space: nowrap; }
+    @media (prefers-reduced-motion: reduce) { .skel::after, .aparece > * { animation: none; } }
+
+    /* ============ Navbar ============ */
+    #nav { transition: .3s; padding: 14px 0; }
+    #nav.scrolled { background: rgba(var(--bg-rgb), .88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); padding: 8px 0; }
+    /* Menú móvil abierto: fondo sólido aunque estés arriba */
+    @media (max-width: 991px) {
+      #nav .navbar-collapse { background: rgba(var(--bg-rgb), .97); border: 1px solid var(--line); border-radius: 12px; margin-top: 10px; padding: 8px 16px 16px; }
+      #nav:has(.navbar-collapse.show), #nav:has(.navbar-collapsing) { background: rgba(var(--bg-rgb), .97); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+    }
+    .brand { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 1.9rem; letter-spacing: 1px; color: var(--tx) !important; line-height: 1; }
+    .brand small { display: block; font-family: 'DM Sans', sans-serif; font-style: normal; font-weight: 700; font-size: .6rem; letter-spacing: 4px; color: var(--gold); }
+    .nav-link { color: var(--muted) !important; font-weight: 500; font-size: .92rem; }
+    .nav-link:hover { color: var(--gold) !important; }
+
+    /* ============ Botones ============ */
+    .btn-main { background: linear-gradient(100deg, var(--ac), var(--ac2)); color: var(--on-ac); border: 1px solid rgba(var(--gold-rgb), .4); font-weight: 700;
+      border-radius: 6px; padding: 12px 28px; letter-spacing: .5px; box-shadow: 0 6px 28px rgba(var(--ac-rgb), .45); transition: .25s; }
+    .btn-main:hover { color: var(--on-ac); transform: translateY(-2px); box-shadow: 0 10px 36px rgba(var(--ac-rgb), .7); }
+    .btn-line { border: 1px solid var(--gold); color: var(--gold); background: transparent; border-radius: 6px; padding: 11px 26px; font-weight: 700; transition: .25s; }
+    .btn-line:hover { background: var(--gold); color: var(--bg); }
+    .btn-wa { background: #25d366; color: #06230f; font-weight: 800; border: 0; border-radius: 6px; padding: 12px 28px; }
+    .btn-wa:hover { background: #3be67d; color: #06230f; transform: translateY(-2px); }
+
+    /* ============ Hero ============ */
+    .hero { min-height: 100vh; padding: 130px 0 0; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+      background: radial-gradient(ellipse at 50% 0%, rgba(var(--ac-rgb), .55), transparent 60%), var(--bg); }
+    .curtain { position: absolute; inset: 0; opacity: .35;
+      background: repeating-linear-gradient(90deg, rgba(var(--ac-rgb), .75) 0 26px, rgba(var(--bg-rgb), .9) 26px 52px);
+      -webkit-mask-image: linear-gradient(180deg, #000, transparent 85%); mask-image: linear-gradient(180deg, #000, transparent 85%); }
+    .beam { position: absolute; top: -15%; width: 26vw; height: 130%; background: linear-gradient(180deg, rgba(var(--gold-rgb), .30), transparent 72%);
+      filter: blur(10px); transform-origin: top center; animation: oscilar 9s ease-in-out infinite alternate; }
+    .beam.b1 { left: 12%; transform: rotate(16deg); }
+    .beam.b2 { right: 10%; transform: rotate(-16deg); animation-delay: -4s; }
+    @keyframes oscilar { to { transform: rotate(0deg); opacity: .55; } }
+    .hero .container { position: relative; z-index: 2; }
+    .hero-title { font-size: clamp(5.5rem, 22vw, 13rem); line-height: .8; margin: 14px 0 6px;
+      background: linear-gradient(180deg, var(--tx), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-sub { font-family: var(--display); font-style: italic; font-weight: 700; font-size: clamp(1.4rem, 4vw, 2.3rem); letter-spacing: 8px; color: var(--gold); text-transform: uppercase; }
+    .hero-copy { max-width: 520px; color: var(--muted); font-size: 1.05rem; }
+    .chip-hero { display: inline-flex; gap: 8px; align-items: center; padding: 7px 16px; border: 1px solid var(--line); border-radius: 50px; font-size: .82rem; color: var(--gold); background: rgba(var(--bg-rgb), .5); }
+    .mini-cumple { display: inline-flex; gap: 12px; align-items: center; margin-top: 26px; padding: 12px 18px; border: 1px solid var(--line); border-radius: 12px; background: rgba(var(--bg-rgb), .6); backdrop-filter: blur(8px); text-decoration: none; color: var(--tx); }
+    .mini-cumple:hover { border-color: var(--gold); color: var(--tx); }
+    .mini-cumple b { color: var(--gold); }
+
+    .marquee { margin-top: 70px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(var(--bg-rgb), .6); overflow: hidden; white-space: nowrap; padding: 12px 0; position: relative; z-index: 2; }
+    .marquee div { display: inline-block; animation: correr 28s linear infinite; font-family: var(--display); font-style: italic; font-weight: 700; font-size: 1.15rem; letter-spacing: 6px; color: var(--gold); text-transform: uppercase; }
+    @keyframes correr { to { transform: translateX(-50%); } }
+
+    /* ============ Tarjetas ============ */
+    .panel { background: var(--card); border: 1px solid var(--line); border-radius: 16px; transition: .3s; }
+    .panel.hover:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 14px 40px rgba(var(--ac-rgb), .3); }
+    .chip { border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 50px; padding: 7px 20px; font-weight: 500; font-size: .9rem; transition: .2s; }
+    .chip.active, .chip:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+
+    /* Cumpleaños */
+    .spot { padding: 34px 28px; text-align: center; position: relative; overflow: hidden; height: 100%;
+      background: radial-gradient(circle at 50% 0%, rgba(var(--ac-rgb), .5), transparent 70%), var(--card); }
+    .spot .avatar { width: 130px; height: 130px; font-size: 3.2rem; }
+    .spot h3 { font-size: 3rem; margin: 12px 0 0; line-height: 1; }
+    .spot .edad { font-family: var(--serif); font-style: italic; color: var(--gold); font-size: 1.4rem; }
+    .cd { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
+    .cd div { min-width: 64px; padding: 10px 6px; border: 1px solid var(--line); border-radius: 10px; background: rgba(var(--bg-rgb), .55); }
+    .cd b { display: block; font-family: var(--display); font-style: italic; font-size: 2rem; line-height: 1; color: var(--gold); }
+    .cd span { font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+    .hoy-banner { display: none; background: var(--gold); color: var(--bg); font-weight: 800; letter-spacing: 3px; text-transform: uppercase; padding: 6px; border-radius: 6px; margin-bottom: 14px; }
+    .confeti { position: absolute; top: -20px; font-size: 1.1rem; animation: caer linear infinite; pointer-events: none; }
+    @keyframes caer { to { transform: translateY(520px) rotate(360deg); opacity: 0; } }
+
+    .evento { display: flex; gap: 16px; padding: 16px; align-items: center; }
+    .fecha-box { min-width: 66px; text-align: center; border-radius: 10px; padding: 8px; background: linear-gradient(135deg, var(--ac), var(--ac2)); color: var(--on-ac); }
+    .fecha-box b { display: block; font-family: var(--display); font-style: italic; font-size: 1.8rem; line-height: 1; }
+    .fecha-box span { font-size: .7rem; letter-spacing: 2px; }
+
+    .tira { display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px; }
+    .mes { border: 1px solid var(--line); border-radius: 10px; padding: 10px 6px; min-height: 92px; text-align: center; font-size: .72rem; background: var(--card); }
+    .mes.actual { border-color: var(--gold); box-shadow: 0 0 18px rgba(var(--gold-rgb), .3); }
+    .mes b { display: block; color: var(--gold); letter-spacing: 2px; margin-bottom: 6px; }
+    .mes i { display: block; font-style: normal; color: var(--tx); line-height: 1.35; }
+    .fan-chip { display: inline-block; padding: 6px 14px; margin: 4px; border: 1px dashed var(--gold); border-radius: 50px; font-size: .88rem; }
+
+    /* Integrantes */
+    .avatar { width: 108px; height: 108px; border-radius: 50%; margin: 0 auto 14px; display: grid; place-items: center; font-family: var(--display); font-style: italic; font-weight: 800; font-size: 2.8rem;
+      background: linear-gradient(135deg, var(--c1, var(--ac)), var(--ac2)); color: #fff; border: 2px solid var(--gold); overflow: hidden; box-shadow: 0 0 28px rgba(var(--ac-rgb), .6); }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .miembro { padding: 26px 16px; text-align: center; height: 100%; }
+    .miembro .rol { color: var(--gold); font-size: .7rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; }
+    .miembro h4 { font-size: 1.9rem; margin: 4px 0; }
+    .miembro .bday { margin-top: 10px; font-size: .82rem; color: var(--gold); }
+
+    /* Eras */
+    .era { padding: 20px; border-radius: 16px; border: 1px solid; height: 100%; display: flex; flex-direction: column; gap: 10px; transition: .3s; position: relative; cursor: pointer; }
+    .era:hover { transform: translateY(-6px); }
+    .era.activa { box-shadow: 0 0 0 2px var(--gold), 0 14px 40px rgba(0, 0, 0, .5); }
+    .era .logo-slot { height: 64px; display: grid; place-items: center; border: 1px dashed rgba(255, 255, 255, .25); border-radius: 10px; font-size: .72rem; opacity: .85; text-align: center; padding: 4px; }
+    .era .logo-slot img { max-height: 52px; max-width: 100%; object-fit: contain; }
+    .era h5 { font-family: var(--display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: 1.35rem; margin: 0; }
+    .era small { opacity: .8; }
+    .swatches { display: flex; gap: 6px; }
+    .swatches i { width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .35); }
+    .era .en-uso { position: absolute; top: 12px; right: 12px; font-size: .65rem; letter-spacing: 2px; font-weight: 800; padding: 3px 10px; border-radius: 50px; background: var(--gold); color: var(--bg); display: none; }
+    .era.activa .en-uso { display: block; }
+
+    /* Videos / Galería */
+    .video { overflow: hidden; cursor: pointer; height: 100%; }
+    .video .thumb { position: relative; aspect-ratio: 16/9; background: linear-gradient(135deg, var(--ac2), var(--bg)); display: grid; place-items: center; }
+    .video .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .play { position: relative; z-index: 2; width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; font-size: 1.6rem; background: var(--ac); color: var(--on-ac); border: 2px solid var(--gold); transition: .25s; }
+    .video:hover .play { transform: scale(1.15); }
+    .video .info { padding: 14px 16px; }
+    .video .info small { color: var(--gold); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: .68rem; }
+    .foto { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: pointer; border: 1px solid var(--line); background: linear-gradient(135deg, var(--ac2), var(--bg)); display: grid; place-items: center; transition: .3s; }
+    .foto:hover { transform: scale(1.03); border-color: var(--gold); }
+    .foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .foto .pie { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 12px 10px; font-size: .84rem; font-weight: 500; background: linear-gradient(transparent, rgba(0, 0, 0, .85)); }
+    .foto .vacia { font-size: 2rem; opacity: .5; }
+
+    /* Redes */
+    .red { display: flex; align-items: center; gap: 14px; padding: 16px 18px; text-decoration: none; color: var(--tx); height: 100%; }
+    .red i.ico { font-size: 1.9rem; color: var(--gold); }
+    .red small { color: var(--muted); display: block; }
+    .red .ir { margin-left: auto; color: var(--gold); }
+    .red.off { opacity: .45; pointer-events: none; }
+    .red-miembro { padding: 20px; height: 100%; }
+    .red-miembro .avatar { width: 64px; height: 64px; font-size: 1.6rem; margin: 0 0 10px; }
+    .btn-red { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; margin: 3px 4px 0 0; border: 1px solid var(--line); border-radius: 50px; color: var(--tx); text-decoration: none; font-size: .82rem; }
+    .btn-red:hover { background: var(--gold); color: var(--bg); }
+    .btn-red.off { opacity: .4; pointer-events: none; }
+
+    /* Ranking */
+    .barra-fila { display: grid; grid-template-columns: 120px 1fr 34px; gap: 12px; align-items: center; margin-bottom: 14px; }
+    .barra { height: 12px; border-radius: 50px; background: rgba(var(--tx-rgb), .1); overflow: hidden; }
+    .barra i { display: block; height: 100%; width: 0; border-radius: 50px; background: linear-gradient(90deg, var(--ac), var(--gold)); transition: width 1.2s ease; }
+
+    .wa-band { border: 1px solid rgba(37, 211, 102, .5); border-radius: 16px; padding: 40px 24px; text-align: center; background: linear-gradient(120deg, rgba(37, 211, 102, .14), rgba(var(--ac-rgb), .25)); }
+
+    /* Formulario */
+    .form-card { padding: 30px; }
+    .form-control, .form-select { background-color: rgba(var(--tx-rgb), .06); border: 1px solid var(--line); border-radius: 8px; padding: 11px 14px; color: var(--tx); }
+    .form-control:focus, .form-select:focus { background-color: rgba(var(--tx-rgb), .1); border-color: var(--gold); box-shadow: 0 0 0 .2rem rgba(var(--gold-rgb), .2); color: var(--tx); }
+    .form-control::placeholder { color: rgba(var(--tx-rgb), .4); }
+    .form-select option { background: var(--bg2); color: var(--tx); }
+    .input-group-text { background: rgba(var(--tx-rgb), .1); border: 1px solid var(--line); color: var(--muted); border-radius: 8px 0 0 8px; }
+    .input-group .form-control { border-radius: 0 8px 8px 0; }
+    .form-label { font-weight: 500; font-size: .88rem; }
+    .trampa { position: absolute; left: -9999px; }
+    .exito { text-align: center; padding: 14px 0; }
+    .exito .emoji { font-size: 3.4rem; display: inline-block; animation: latido 1.3s infinite; }
+    @keyframes latido { 50% { transform: scale(1.15); } }
+
+    /* ============ CREDENCIAL ============ */
+    .cred-wrap { perspective: 800px; max-width: 440px; margin: 0 auto; }
+    .cred { position: relative; aspect-ratio: 1.586; border-radius: 20px; padding: 20px 22px; overflow: hidden; color: var(--tx);
+      background: linear-gradient(135deg, var(--ac) 0%, var(--ac2) 48%, var(--bg) 100%); border: 1.5px solid var(--gold);
+      box-shadow: 0 22px 60px rgba(var(--ac-rgb), .55); display: flex; flex-direction: column; justify-content: space-between; transition: transform .15s; }
+    .cred::before { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(var(--gold-rgb), .28) 46%, transparent 60%); background-size: 250% 100%; animation: brillo 4.5s linear infinite; }
+    @keyframes brillo { from { background-position: 150% 0; } to { background-position: -100% 0; } }
+    .cred > * { position: relative; }
+    .cred-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .cred-brand { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 1.5rem; letter-spacing: 1px; line-height: 1; color: var(--tx); }
+    .cred-brand span { color: var(--gold); margin: 0 4px; }
+    .cred-city { font-size: .6rem; letter-spacing: 3px; font-weight: 700; color: var(--gold); text-align: right; }
+    .cred-mid { display: flex; gap: 14px; align-items: center; }
+    .cred-avatar { width: 68px; height: 68px; border-radius: 50%; border: 2px solid var(--gold); display: grid; place-items: center; overflow: hidden; flex-shrink: 0;
+      background: var(--bg); font-family: var(--display); font-style: italic; font-weight: 800; font-size: 1.9rem; color: var(--gold); }
+    .cred-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .cred-label { font-size: .55rem; letter-spacing: 3px; color: var(--gold); font-weight: 700; }
+    .cred-name { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 1.55rem; line-height: 1.02; text-transform: uppercase; max-height: 3.1em; overflow: hidden; word-break: break-word; color: var(--tx); }
+    .cred-bias { font-size: .78rem; color: var(--tx); opacity: .9; margin-top: 4px; }
+    .cred-bot { display: flex; justify-content: space-between; align-items: flex-end; font-size: .85rem; }
+    .cred-bot b { font-family: var(--display); font-style: italic; font-size: 1.15rem; letter-spacing: 1px; color: var(--tx); }
+    .cred-stars { color: var(--gold); letter-spacing: 3px; font-size: .75rem; }
+    .cred-bars { height: 16px; opacity: .45; background: repeating-linear-gradient(90deg, rgba(var(--tx-rgb), .9) 0 2px, transparent 2px 6px, rgba(var(--tx-rgb), .9) 6px 7px, transparent 7px 11px); }
+
+    /* ============ Banner de comeback ============ */
+    #comeback { display: none; padding: 40px 0 10px; }
+    .cb-card { position: relative; overflow: hidden; border: 1px solid var(--gold); border-radius: 20px; padding: 44px 38px; background-color: var(--bg2); background-size: cover; background-position: center;
+      background-image: linear-gradient(115deg, rgba(var(--bg-rgb), .95) 20%, rgba(var(--ac-rgb), .55)), repeating-linear-gradient(90deg, rgba(var(--ac-rgb), .25) 0 22px, transparent 22px 44px);
+      box-shadow: 0 20px 70px rgba(var(--ac-rgb), .45); }
+    .cb-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 50px; background: var(--gold); color: var(--bg); font-weight: 800; font-size: .72rem; letter-spacing: 3px; text-transform: uppercase; }
+    .cb-badge i { width: 9px; height: 9px; border-radius: 50%; background: #e11; animation: pulso 1.2s infinite; }
+    @keyframes pulso { 50% { opacity: .2; } }
+    .cb-title { font-size: clamp(2.6rem, 8vw, 5.6rem); line-height: .9; margin: 16px 0 8px; }
+    .cb-sub { font-family: var(--serif); font-style: italic; font-size: 1.5rem; color: var(--gold); }
+    .cb-chip { display: inline-block; padding: 5px 14px; margin: 4px 6px 0 0; border: 1px solid var(--line); border-radius: 50px; font-size: .85rem; background: rgba(var(--bg-rgb), .55); }
+    .cb-card .cd { justify-content: flex-start; margin: 22px 0 10px; }
+    .cb-ya { display: none; font-family: var(--display); font-style: italic; font-weight: 800; font-size: 2.4rem; color: var(--gold); margin: 18px 0 10px; text-transform: uppercase; }
+    .cb-fecha { font-size: .85rem; color: var(--muted); }
+    .hero { min-height: 88vh; }
+
+    /* ============ Perfil de integrante (popup) ============ */
+    .miembro { cursor: pointer; }
+    .miembro .ver-perfil { margin-top: 12px; font-size: .78rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+    .modal-miembro { background: linear-gradient(180deg, var(--bg2), var(--bg)); border: 1px solid var(--gold); border-radius: 18px; overflow: hidden; color: var(--tx); }
+    .modal-miembro .cabecera { padding: 34px 20px 20px; text-align: center; background: radial-gradient(circle at 50% 0%, rgba(var(--ac-rgb), .6), transparent 75%); }
+    .modal-miembro .avatar { width: 130px; height: 130px; font-size: 3.4rem; }
+    .modal-miembro h3 { font-size: 2.8rem; margin: 6px 0 0; line-height: 1; }
+    .modal-miembro .real { font-family: var(--serif); font-style: italic; color: var(--gold); font-size: 1.25rem; }
+    .modal-miembro .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 20px; }
+    .modal-miembro .stats div { text-align: center; padding: 10px 4px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+    .modal-miembro .stats b { display: block; font-family: var(--display); font-style: italic; font-size: 1.5rem; color: var(--gold); line-height: 1.1; }
+    .modal-miembro .stats span { font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+    .modal-miembro .cuerpo { padding: 18px 22px 24px; }
+    .modal-miembro .btn-close { position: absolute; top: 14px; right: 14px; z-index: 5; filter: invert(1); }
+    .aviso-reg { border: 1px solid var(--gold); background: rgba(var(--gold-rgb), .12); color: var(--tx); border-radius: 12px; padding: 14px; }
+
+    /* ============ Footer, flotantes ============ */
+    footer { border-top: 1px solid var(--line); padding: 44px 0 30px; background: rgba(0, 0, 0, .35); }
+    .redes-foot a { width: 44px; height: 44px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); color: var(--tx); margin: 0 4px; font-size: 1.15rem; transition: .25s; text-decoration: none; }
+    .redes-foot a:hover { background: var(--gold); color: var(--bg); transform: translateY(-4px); }
+    .wa-float { position: fixed; right: 18px; bottom: 18px; z-index: 99; width: 56px; height: 56px; border-radius: 50%; background: #25d366; color: #fff; display: grid; place-items: center; font-size: 1.8rem; box-shadow: 0 0 24px rgba(37, 211, 102, .55); }
+    .wa-float:hover { color: #fff; transform: scale(1.1); }
+
+    .era-fab { position: fixed; left: 18px; bottom: 18px; z-index: 99; }
+    .era-fab > button { width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--gold); background: var(--bg2); color: var(--gold); font-size: 1.4rem; box-shadow: 0 6px 24px rgba(0, 0, 0, .5); }
+    .era-panel { position: absolute; bottom: 66px; left: 0; width: 230px; padding: 14px; border-radius: 14px; background: rgba(var(--bg-rgb), .96); border: 1px solid var(--line); display: none; }
+    .era-fab.open .era-panel { display: block; }
+    .era-panel small { display: block; margin-bottom: 8px; color: var(--gold); letter-spacing: 3px; font-weight: 700; font-size: .62rem; text-transform: uppercase; }
+    .era-dots { display: flex; flex-wrap: wrap; gap: 8px; }
+    .era-dots button { width: 38px; height: 38px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .35); padding: 0; }
+    .era-dots button.activa { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(var(--gold-rgb), .4); }
+
+    .reveal { opacity: 0; transform: translateY(26px); transition: .7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    @media (max-width: 991px) { .tira { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 575px) {
+      section { padding: 70px 0; }
+      .tira { grid-template-columns: repeat(3, 1fr); }
+      .hero-sub { letter-spacing: 4px; }
+      .barra-fila { grid-template-columns: 90px 1fr 30px; }
+      .form-card { padding: 20px; }
+      .cred-name { font-size: 1.25rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg fixed-top" id="nav">
+  <div class="container">
+    <a class="navbar-brand brand" href="#inicio"><span class="nombreGrupo">ATEEZ</span><small>ATINY TACNA</small></a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-label="Menú"><i class="bi bi-list fs-1"></i></button>
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item" id="navComeback" style="display:none"><a class="nav-link" href="#comeback" style="color:var(--gold)!important;font-weight:700">🔥 Comeback</a></li>
+        <li class="nav-item"><a class="nav-link" href="#cumples">Cumpleaños</a></li>
+        <li class="nav-item"><a class="nav-link" href="#integrantes">Integrantes</a></li>
+        <li class="nav-item"><a class="nav-link" href="#eras">Eras</a></li>
+        <li class="nav-item"><a class="nav-link" href="#videos">Videos</a></li>
+        <li class="nav-item"><a class="nav-link" href="#galeria">Galería</a></li>
+        <li class="nav-item"><a class="nav-link" href="#redes">Redes</a></li>
+      </ul>
+      <a href="#unete" class="btn btn-main btn-sm">Obtén tu credencial</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= INICIO ================= -->
+<header class="hero" id="inicio">
+  <div class="curtain"></div><div class="beam b1"></div><div class="beam b2"></div>
+  <div class="container">
+    <span class="chip-hero"><i class="bi bi-geo-alt-fill"></i> <span id="heroCiudad">Tacna, Perú</span> &nbsp;·&nbsp; 8 makes 1 team</span>
+    <h1 class="hero-title nombreGrupo">ATEEZ</h1>
+    <div class="hero-sub">ATINY Tacna · Fan Club</div>
+    <p class="hero-copy mt-3" id="heroLema">Una comunidad de ATINY en el sur del Perú: nos juntamos para alentar, celebrar cumpleaños, hacer proyectos y disfrutar de su música.</p>
+    <div class="d-flex flex-wrap gap-3 mt-4">
+      <a href="#unete" class="btn btn-main btn-lg"><i class="bi bi-person-vcard"></i> Quiero mi credencial</a>
+      <a href="#" class="btn btn-line btn-lg linkWhatsApp" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i> Grupo de WhatsApp</a>
+    </div>
+    <a href="#cumples" class="mini-cumple" id="miniCumple" style="display:none">
+      <span style="font-size:1.6rem">🎂</span>
+      <span><small class="muted d-block">Próximo cumpleaños</small><b id="miniNombre"></b> <span id="miniDias"></span></span>
+    </a>
+  </div>
+  <div class="marquee"><div id="marquee"></div></div>
+</header>
+
+<!-- ================= BANNER DE COMEBACK ================= -->
+<section id="comeback">
+  <div class="container">
+    <div class="cb-card" id="cbCard">
+      <span class="cb-badge"><i></i> Temporada de comeback</span>
+      <h2 class="cb-title" id="cbTitulo"></h2>
+      <div class="cb-sub" id="cbSub"></div>
+      <div id="cbCanciones" class="mt-2"></div>
+
+      <div id="cbCuenta" class="cd">
+        <div><b id="cbDias">0</b><span>Días</span></div><div><b id="cbHoras">0</b><span>Hrs</span></div>
+        <div><b id="cbMin">0</b><span>Min</span></div><div><b id="cbSeg">0</b><span>Seg</span></div>
+      </div>
+      <div class="cb-ya" id="cbYa">¡Ya está aquí! 🎉</div>
+      <div class="cb-fecha mb-3" id="cbFecha"></div>
+
+      <div class="d-flex flex-wrap gap-3">
+        <a href="#" class="btn btn-main btn-lg" id="cbBoton" target="_blank" rel="noopener"><i class="bi bi-play-fill"></i> <span id="cbBotonTexto">Ver el MV</span></a>
+        <a href="#videos" class="btn btn-line btn-lg"><i class="bi bi-bar-chart-line"></i> Proyecto de streaming</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CUMPLEAÑOS Y AGENDA ================= -->
+<section id="cumples">
+  <div class="container">
+    <div class="reveal mb-5">
+      <span class="eyebrow">Celebramos juntos</span>
+      <h2 class="sec-title">Cumpleaños <em>&amp; agenda</em></h2>
+      <p class="sec-sub">Nunca más te pierdas el cumple de tu bias.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-6 reveal">
+        <div class="panel spot" id="spot"></div>
+      </div>
+      <div class="col-lg-6 reveal">
+        <h5 class="display mb-3" style="font-size:1.6rem">Agenda del fan club</h5>
+        <div class="d-grid gap-3" id="listaEventos"></div>
+      </div>
+    </div>
+
+    <div class="reveal mt-5">
+      <h5 class="display mb-3" style="font-size:1.6rem">El año de ATEEZ</h5>
+      <div class="tira" id="tiraAnual"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INTEGRANTES ================= -->
+<section id="integrantes" class="alt-bg">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <span class="eyebrow">Los ocho</span>
+      <h2 class="sec-title">Integrantes</h2>
+      <p class="sec-sub mx-auto">¿Quién es tu bias? Conoce a cada uno.</p>
+    </div>
+    <div class="row g-4 justify-content-center" id="listaIntegrantes"></div>
+  </div>
+</section>
+
+<!-- ================= ERAS / LOGOS ================= -->
+<section id="eras">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <span class="eyebrow">Golden Hour</span>
+      <h2 class="sec-title">Elige tu <em>era</em></h2>
+      <p class="sec-sub mx-auto">Cada era tuvo su logo y su paleta. Toca una y la página entera se viste con sus colores (incluso tu credencial).</p>
+    </div>
+    <div class="row g-4" id="listaEras"></div>
+  </div>
+</section>
+
+<!-- ================= VIDEOS ================= -->
+<section id="videos" class="alt-bg">
+  <div class="container">
+    <div class="text-center mb-4 reveal">
+      <span class="eyebrow">Dale play</span>
+      <h2 class="sec-title">Videos musicales</h2>
+      <p class="sec-sub mx-auto">Míralos aquí mismo y súmales vistas.</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2 justify-content-center mb-3" id="filtroVideos"></div>
+    <div class="mx-auto mb-4" style="max-width:420px">
+      <input type="search" class="form-control" id="buscarVideo" placeholder="Buscar un video o canción...">
+    </div>
+    <div class="row g-4" id="listaVideos"></div>
+    <div class="text-center mt-4">
+      <button class="btn btn-line d-none" id="btnMasVideos">Ver más videos</button>
+      <div class="small muted mt-2" id="contadorVideos"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GALERÍA ================= -->
+<section id="galeria">
+  <div class="container">
+    <div class="text-center mb-4 reveal">
+      <span class="eyebrow">Recuerdos</span>
+      <h2 class="sec-title">Galería</h2>
+    </div>
+    <div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
+      <button class="chip active" data-tipo="grupo"><i class="bi bi-stars"></i> Fotos de <span class="nombreGrupo">ATEEZ</span></button>
+      <button class="chip" data-tipo="fanclub"><i class="bi bi-people-fill"></i> Fotos del fan club</button>
+    </div>
+    <div class="row g-3" id="listaFotos"></div>
+  </div>
+</section>
+
+<!-- ================= REDES ================= -->
+<section id="redes" class="alt-bg">
+  <div class="container">
+    <div class="text-center mb-4 reveal">
+      <span class="eyebrow">Encuéntranos</span>
+      <h2 class="sec-title">Redes sociales</h2>
+      <p class="sec-sub mx-auto">Nosotros, la fanbase peruana y las cuentas oficiales de ATEEZ y de cada integrante.</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2 justify-content-center mb-2" id="tabsRedes">
+      <button class="chip active" data-red="fanclub"><i class="bi bi-geo-alt"></i> ATINY Tacna</button>
+      <button class="chip" data-red="ateezperu"><i class="bi bi-flag"></i> ATEEZ Perú</button>
+      <button class="chip" data-red="ateez"><i class="bi bi-patch-check"></i> ATEEZ oficial</button>
+      <button class="chip" data-red="integrante"><i class="bi bi-person-hearts"></i> Integrantes</button>
+    </div>
+    <p class="text-center muted small mb-4" id="notaRed"></p>
+    <div class="row g-3" id="listaRedes"></div>
+  </div>
+</section>
+
+<!-- ================= RANKING ================= -->
+<section id="ranking">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-5 reveal">
+        <span class="eyebrow">Comunidad</span>
+        <h2 class="sec-title">El bias más querido de <em>Tacna</em></h2>
+        <p class="sec-sub">Se calcula con los registros del fan club. Hazte miembro y vota con tu bias.</p>
+      </div>
+      <div class="col-lg-7 reveal"><div class="panel p-4" id="listaRanking"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WHATSAPP ================= -->
+<section class="py-5">
+  <div class="container reveal">
+    <div class="wa-band">
+      <i class="bi bi-whatsapp" style="font-size:3rem;color:#25d366"></i>
+      <h3 class="mt-2" style="font-size:2.2rem">Únete a nuestro grupo de WhatsApp</h3>
+      <p class="muted mb-4">Avisos, proyectos de streaming, memes y mucho amor por <span class="nombreGrupo">ATEEZ</span>. Entra directo, sin formulario.</p>
+      <a href="#" class="btn btn-wa btn-lg linkWhatsApp" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i> Entrar al grupo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REGISTRO + CREDENCIAL ================= -->
+<section id="unete" class="alt-bg">
+  <div class="container">
+    <div class="text-center mb-5 reveal">
+      <span class="eyebrow">Membresía</span>
+      <h2 class="sec-title">Tu credencial <em>ATINY Tacna</em></h2>
+      <p class="sec-sub mx-auto">Llena el formulario, mira cómo se arma tu credencial y descárgala al terminar.</p>
+    </div>
+
+    <div class="aviso-reg text-center mb-4 d-none" id="avisoRegistro">🎉 <b>¡Registro completado!</b> Esta es tu credencial: descárgala y entra al grupo de WhatsApp.</div>
+
+    <div class="row g-5 align-items-start">
+      <!-- Formulario -->
+      <div class="col-lg-7 reveal">
+        <div class="panel form-card">
+          <form id="formRegistro" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label" for="nombres">Nombres *</label>
+                <input type="text" class="form-control" id="nombres" placeholder="Ej: María Fernanda" required minlength="2" maxlength="60" autocomplete="given-name">
+                <div class="invalid-feedback">Escribe tus nombres.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="apellidos">Apellidos *</label>
+                <input type="text" class="form-control" id="apellidos" placeholder="Ej: Quispe Mamani" required minlength="2" maxlength="60" autocomplete="family-name">
+                <div class="invalid-feedback">Escribe tus apellidos.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="celular">Número de celular *</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text">+51</span>
+                  <input type="tel" class="form-control" id="celular" placeholder="987654321" required pattern="9[0-9]{8}" maxlength="9" inputmode="numeric" autocomplete="tel-national">
+                  <div class="invalid-feedback">Debe tener 9 dígitos y empezar con 9.</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="nombreWhatsapp">Nombre en WhatsApp *</label>
+                <input type="text" class="form-control" id="nombreWhatsapp" placeholder="Cómo apareces en WhatsApp" required maxlength="60">
+                <div class="invalid-feedback">Escribe tu nombre de WhatsApp.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="fechaNacimiento">Fecha de nacimiento *</label>
+                <input type="date" class="form-control" id="fechaNacimiento" required min="1940-01-01">
+                <div class="invalid-feedback">Elige tu fecha de nacimiento.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="edad">Edad</label>
+                <input type="text" class="form-control" id="edad" placeholder="Se calcula sola" readonly>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="correo">Correo electrónico *</label>
+                <input type="email" class="form-control" id="correo" placeholder="tucorreo@gmail.com" required maxlength="100" autocomplete="email">
+                <div class="invalid-feedback">Escribe un correo válido.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="bias">¿Quién es tu bias? *</label>
+                <select class="form-select" id="bias" required><option value="">Elige a tu favorito...</option></select>
+                <div class="invalid-feedback">Elige a tu bias.</div>
+              </div>
+              <div class="col-12">
+                <label class="form-label" for="atinyDesde">¿Desde qué año eres ATINY? <small class="muted">(opcional)</small></label>
+                <select class="form-select" id="atinyDesde">
+                  <option value="">Elige un año...</option>
+                  <option>2018</option><option>2019</option><option>2020</option><option>2021</option>
+                  <option>2022</option><option>2023</option><option>2024</option><option>2025</option><option>2026</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="acepto" required>
+                  <label class="form-check-label small muted" for="acepto">Acepto que el fan club use mis datos solo para contactarme y organizar actividades. *</label>
+                  <div class="invalid-feedback">Debes aceptar para continuar.</div>
+                </div>
+              </div>
+              <input type="text" class="trampa" id="web" tabindex="-1" autocomplete="off">
+              <div class="col-12">
+                <div class="alert alert-danger d-none" id="errorForm"></div>
+                <button type="submit" class="btn btn-main btn-lg w-100" id="btnEnviar">
+                  <span id="btnTexto"><i class="bi bi-person-vcard"></i> Crear mi credencial</span>
+                  <span id="btnCargando" class="d-none"><span class="spinner-border spinner-border-sm"></span> Enviando...</span>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <div class="exito d-none" id="exito">
+            <div class="emoji">💜</div>
+            <h3 class="mt-2" style="font-size:2.4rem">¡Bienvenid@, <span id="exitoNombre"></span>!</h3>
+            <p class="muted">Ya eres parte de ATINY Tacna. Descarga tu credencial y entra al grupo de WhatsApp.</p>
+            <a href="#" class="btn btn-wa btn-lg linkWhatsApp" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i> Unirme al grupo</a>
+          </div>
+        </div>
+
+        <!-- Recuperar credencial -->
+        <div class="mt-3">
+          <button class="btn btn-link text-decoration-none p-0" style="color:var(--gold)" data-bs-toggle="collapse" data-bs-target="#boxRecuperar">
+            <i class="bi bi-arrow-repeat"></i> Ya me registré: recuperar mi credencial
+          </button>
+          <div class="collapse mt-3" id="boxRecuperar">
+            <form id="formRecuperar" class="panel p-3" novalidate>
+              <div class="row g-2">
+                <div class="col-md-5"><input type="tel" class="form-control" id="recCelular" placeholder="Tu celular (9 dígitos)" maxlength="9" inputmode="numeric" required></div>
+                <div class="col-md-5"><input type="email" class="form-control" id="recCorreo" placeholder="Tu correo registrado" required></div>
+                <div class="col-md-2 d-grid"><button class="btn btn-line" type="submit">Buscar</button></div>
+              </div>
+              <div class="small mt-2 text-danger d-none" id="errorRecuperar"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Credencial en vivo -->
+      <div class="col-lg-5 reveal">
+        <div class="cred-wrap" id="credWrap">
+          <div class="cred" id="cred">
+            <div class="cred-top">
+              <div class="cred-brand"><span class="nombreGrupo">ATEEZ</span><span>✕</span>ATINY</div>
+              <div class="cred-city">FAN CLUB<br>TACNA · PERÚ</div>
+            </div>
+            <div class="cred-mid">
+              <div class="cred-avatar" id="credAvatar">?</div>
+              <div>
+                <div class="cred-label">MIEMBRO</div>
+                <div class="cred-name" id="credNombre">Tu nombre</div>
+                <div class="cred-bias">BIAS · <b id="credBias" style="font-weight:700">—</b></div>
+              </div>
+            </div>
+            <div class="cred-bot">
+              <div><div class="cred-label">N°</div><b id="credNumero">TAC-????</b></div>
+              <div class="cred-stars">✦✦✦✦✦✦✦✦</div>
+              <div style="text-align:right"><div class="cred-label">DESDE</div><b id="credDesde">--/----</b></div>
+            </div>
+            <div class="cred-bars"></div>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <p class="muted small mb-3" id="credNota">Así se verá tu credencial. Cambia de era con el botón 🎨 y cambia también sus colores.</p>
+          <button class="btn btn-line" id="btnDescargar" disabled><i class="bi bi-download"></i> Descargar credencial (PNG)</button>
+          <div class="small text-danger mt-2 d-none" id="errorDescarga"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container text-center">
+    <div class="brand d-inline-block mb-3"><span class="nombreGrupo">ATEEZ</span><small>ATINY TACNA · FAN CLUB</small></div>
+    <div class="redes-foot mb-3" id="redesFoot"></div>
+    <p class="muted small mb-1">Fan club hecho por fans, sin fines de lucro y oficial, pertenecientes a las sedes de Ateez Perú.</p>
+    <p class="muted small mb-0">Hecho con 💜 en Tacna, Perú</p>
+  </div>
+</footer>
+
+<a href="#" class="wa-float linkWhatsApp" target="_blank" rel="noopener" aria-label="Grupo de WhatsApp"><i class="bi bi-whatsapp"></i></a>
+
+<!-- Selector de era -->
+<div class="era-fab" id="eraFab">
+  <div class="era-panel"><small>Elige tu era</small><div class="era-dots" id="eraDots"></div></div>
+  <button type="button" id="eraBtn" aria-label="Cambiar de era"><i class="bi bi-palette2"></i></button>
+</div>
+
+<!-- Modales -->
+<div class="modal fade" id="modalMiembro" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-miembro">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      <div id="modalMiembroBody"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalVideo" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content bg-black border-0" style="border-radius:14px;overflow:hidden">
+      <div class="ratio ratio-16x9"><iframe id="playerVideo" src="" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalFoto" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-black border-0" style="border-radius:14px;overflow:hidden"><img id="fotoGrande" src="" class="img-fluid" alt=""></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="config.js"></script>
+<script src="tema.js"></script>
+<script>
+  let DATA = null;
+  const $ = (id) => document.getElementById(id);
+
+  // ---------- Eras (las paletas viven en tema.js) ----------
+  function aplicarEra(id, guardar) {
+    aplicarTema(id, guardar);
+    pintarEras();
+    pintarDotsEra();
+  }
+
+  function pintarDotsEra() {
+    $("eraDots").innerHTML = ERAS.map((e) => `
+      <button type="button" class="${e.id === eraActual ? "activa" : ""}" data-era="${e.id}" title="${e.nombre}" aria-label="${e.nombre}"
+        style="background:linear-gradient(135deg,${e.ac} 50%,${e.gold} 50%)"></button>`).join("");
+  }
+
+  // ---------- Datos de ejemplo (modo demo) ----------
+  function datosDemo() {
+    const enDias = (d) => { const f = new Date(Date.now() + d * 86400000); f.setHours(18, 0, 0, 0); return f.toISOString(); };
+    const nombres = ["Hongjoong", "Seonghwa", "Yunho", "Yeosang", "San", "Mingi", "Wooyoung", "Jongho"];
+    return {
+      config: {
+        nombre_grupo: "ATEEZ", ciudad: "Tacna, Perú",
+        whatsapp_url: "https://chat.whatsapp.com/",
+        debut: "24 de octubre de 2018", agencia: "KQ Entertainment", nombre_fandom: "ATINY",
+        comeback_activo: "SI",
+        comeback_titulo: "GOLDEN HOUR : Part.6",
+        comeback_subtitulo: "15.º mini álbum · Título: UP",
+        comeback_fecha: "2026-11-13T00:00:00",
+        comeback_canciones: "UP (canción título), DRIP (adelanto)",
+        comeback_link: "", comeback_link_texto: "Ver el MV",
+        comeback_imagen: "", comeback_era: "gh6"
+      },
+      integrantes: [
+        { nombre: "Hongjoong", rol: "Líder · Rapero · Compositor", nombre_real: "Kim Hongjoong", descripcion: "Escribe aquí una descripción del integrante: su personalidad, su rol en el grupo, lo que más te gusta de él.", dato_curioso: "", cumple: "1998-11-07", color: "#d4121c" },
+        { nombre: "Seonghwa", rol: "Vocalista", nombre_real: "Park Seonghwa", descripcion: "Escribe aquí una descripción del integrante.", dato_curioso: "", cumple: "1998-04-03", color: "#8b5cf6" },
+        { nombre: "Yunho", rol: "Vocalista · Bailarín", nombre_real: "Jeong Yunho", descripcion: "Escribe aquí una descripción del integrante.", dato_curioso: "", cumple: "1999-03-23", color: "#1d5273" },
+        { nombre: "Yeosang", rol: "Vocalista", nombre_real: "Kang Yeosang", descripcion: "Escribe aquí una descripción del integrante.", dato_curioso: "", cumple: "1999-06-15", color: "#c9ad7a" },
+        { nombre: "San", rol: "Bailarín principal · Vocalista", nombre_real: "Choi San", descripcion: "Escribe aquí una descripción del integrante.", dato_curioso: "", cumple: "1999-07-10", color: "#1f9a6e" },
+        { nombre: "Mingi", rol: "Rapero principal · Bailarín", nombre_real: "Song Mingi", descripcion: "Escribe aquí una descripción del integrante.", dato_curioso: "", cumple: "1999-08-09", color: "#ff4a0f" },
+        { nombre: "Wooyoung", rol: "Bailarín principal · Vocalista", nombre_real: "Jung Wooyoung", descripcion: "Escribe aquí una descripción del integrante.", dato_curioso: "", cumple: "1999-11-26", color: "#9c0512" },
+        { nombre: "Jongho", rol: "Vocalista principal · Maknae", nombre_real: "Choi Jongho", descripcion: "Escribe aquí una descripción del integrante.", dato_curioso: "", cumple: "2000-10-12", color: "#1f43bd" }
+      ],
+      eventos: [
+        { titulo: "Juntada del fan club", fecha: enDias(9), lugar: "Plaza por definir, Tacna", descripcion: "Conversatorio, karaoke y dinámicas K-pop." },
+        { titulo: "Proyecto de streaming", fecha: enDias(20), lugar: "Online (Zoom)", descripcion: "Todos juntos viendo el MV para sumar vistas." }
+      ],
+      eras: [],
+      videos: [
+        { titulo: "Video musical de ejemplo 1", url: "", categoria: "MV" },
+        { titulo: "Video musical de ejemplo 2", url: "", categoria: "MV" },
+        { titulo: "Presentación de ejemplo", url: "", categoria: "Live" },
+        { titulo: "Dance practice de ejemplo", url: "", categoria: "Dance practice" }
+      ],
+      galeria: [
+        { titulo: "Foto de ATEEZ 1", url: "", tipo: "grupo" }, { titulo: "Foto de ATEEZ 2", url: "", tipo: "grupo" },
+        { titulo: "Foto de ATEEZ 3", url: "", tipo: "grupo" }, { titulo: "Foto de ATEEZ 4", url: "", tipo: "grupo" },
+        { titulo: "Nuestra primera juntada", url: "", tipo: "fanclub" }, { titulo: "Cumpleaños de un integrante", url: "", tipo: "fanclub" }
+      ],
+      redes: [
+        { categoria: "fanclub", nombre: "ATINY Tacna", plataforma: "Instagram", usuario: "", url: "" },
+        { categoria: "fanclub", nombre: "ATINY Tacna", plataforma: "TikTok", usuario: "", url: "" },
+        { categoria: "fanclub", nombre: "ATINY Tacna", plataforma: "WhatsApp", usuario: "Grupo de la comunidad", url: "https://chat.whatsapp.com/" },
+        { categoria: "ateezperu", nombre: "ATEEZ Perú", plataforma: "Instagram", usuario: "", url: "" },
+        { categoria: "ateezperu", nombre: "ATEEZ Perú", plataforma: "X", usuario: "", url: "" },
+        { categoria: "ateezperu", nombre: "ATEEZ Perú", plataforma: "TikTok", usuario: "", url: "" },
+        { categoria: "ateez", nombre: "ATEEZ", plataforma: "Instagram", usuario: "@ateez_official_", url: "https://www.instagram.com/ateez_official_/" },
+        { categoria: "ateez", nombre: "ATEEZ", plataforma: "X", usuario: "@ATEEZofficial", url: "https://x.com/ATEEZofficial" },
+        { categoria: "ateez", nombre: "ATEEZ", plataforma: "YouTube", usuario: "@ATEEZofficial", url: "https://www.youtube.com/@ATEEZofficial" },
+        { categoria: "ateez", nombre: "ATEEZ", plataforma: "TikTok", usuario: "@ateez_official_", url: "https://www.tiktok.com/@ateez_official_" },
+        { categoria: "ateez", nombre: "ATEEZ", plataforma: "Facebook", usuario: "ATEEZofficial", url: "https://www.facebook.com/ATEEZofficial/" }
+      ].concat(nombres.map((n) => ({
+        categoria: "integrante", nombre: n, plataforma: "Instagram",
+        usuario: n === "Hongjoong" ? "@no1likeme8_8" : "", url: n === "Hongjoong" ? "https://www.instagram.com/no1likeme8_8/" : ""
+      }))),
+      ranking: [
+        { bias: "San", total: 12 }, { bias: "Hongjoong", total: 9 }, { bias: "Wooyoung", total: 7 },
+        { bias: "Jongho", total: 6 }, { bias: "Mingi", total: 4 }, { bias: "Yunho", total: 2 }
+      ],
+      totalMiembros: 33
+    };
+  }
+
+  // ---------- Utilidades ----------
+  function esc(texto) {
+    const div = document.createElement("div");
+    div.textContent = texto == null ? "" : texto;
+    return div.innerHTML;
+  }
+
+  function youtubeId(url) {
+    const m = String(url || "").match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);
+    return m ? m[1] : null;
+  }
+
+  const meses = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+  const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  async function cargarDatos() {
+    if (MODO_DEMO) return datosDemo();
+    const res = await fetch(API_URL + "?action=data");
+    return await res.json();
+  }
+
+  // ---------- Cumpleaños ----------
+  function proximoCumple(texto) {
+    const partes = String(texto).split("-").map(Number); // [año, mes, día]
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    let prox = new Date(hoy.getFullYear(), partes[1] - 1, partes[2]);
+    if (prox < hoy) prox = new Date(hoy.getFullYear() + 1, partes[1] - 1, partes[2]);
+    const dias = Math.round((prox - hoy) / 86400000);
+    return { fecha: prox, dias: dias, edad: prox.getFullYear() - partes[0], esHoy: dias === 0 };
+  }
+
+  function listaCumples() {
+    return (DATA.integrantes || [])
+      .filter((m) => m.cumple)
+      .map((m) => Object.assign({}, m, proximoCumple(m.cumple)))
+      .sort((a, b) => a.dias - b.dias);
+  }
+
+  // paraDescarga = true solo en la credencial: así html2canvas puede incluir la foto en el PNG
+  function avatarHTML(nombre, foto, paraDescarga) {
+    const cors = paraDescarga ? ' crossorigin="anonymous"' : "";
+    return foto ? `<img src="${esc(foto)}" alt="${esc(nombre)}" loading="lazy"${cors}>` : esc(String(nombre).charAt(0).toUpperCase());
+  }
+
+  let timerCumple = null;
+
+  function pintarCumples() {
+    const lista = listaCumples();
+    if (lista.length === 0) { $("spot").innerHTML = `<p class="muted">Agrega la fecha de cumpleaños en la hoja Integrantes.</p>`; return; }
+    const m = lista[0];
+    const fechaTxt = m.fecha.getDate() + " de " + m.fecha.toLocaleDateString("es-PE", { month: "long" });
+
+    // Mini tarjeta del hero
+    $("miniCumple").style.display = "inline-flex";
+    $("miniNombre").textContent = m.nombre;
+    $("miniDias").textContent = m.esHoy ? "· ¡es HOY! 🎉" : "· en " + m.dias + (m.dias === 1 ? " día" : " días");
+
+    // Tarjeta principal
+    $("spot").innerHTML = `
+      <div class="eyebrow mb-3">Próximo cumpleaños</div>
+      <div class="hoy-banner" id="spHoy">¡Hoy es su cumpleaños!</div>
+      <div class="avatar" data-perfil="${esc(m.nombre)}" style="--c1:${esc(m.color || "var(--ac)")};cursor:pointer">${avatarHTML(m.nombre, m.foto)}</div>
+      <h3>${esc(m.nombre)}</h3>
+      <div class="edad">cumple ${m.edad} años · ${fechaTxt}</div>
+      <div class="cd">
+        <div><b id="spDias">0</b><span>Días</span></div><div><b id="spHoras">0</b><span>Hrs</span></div>
+        <div><b id="spMin">0</b><span>Min</span></div><div><b id="spSeg">0</b><span>Seg</span></div>
+      </div>
+      <button class="btn btn-line btn-sm" id="btnSaludo"><i class="bi bi-clipboard-heart"></i> Copiar mensaje de saludo</button>
+      <div class="small mt-2 text-success d-none" id="saludoOk">¡Copiado! Pégalo en tus redes 💜</div>`;
+
+    $("btnSaludo").onclick = async () => {
+      const texto = "¡Feliz cumpleaños " + m.nombre + "! 🎂💜 Gracias por tanto, desde Tacna, Perú. #HappyBirthday" + m.nombre + " #ATEEZ #ATINY";
+      try { await navigator.clipboard.writeText(texto); $("saludoOk").classList.remove("d-none"); } catch (err) { prompt("Copia este mensaje:", texto); }
+    };
+
+    if (m.esHoy) { $("spHoy").style.display = "block"; lanzarConfeti(); }
+
+    clearInterval(timerCumple);
+    const actualizar = () => {
+      const falta = Math.max(0, m.fecha - new Date());
+      $("spDias").textContent = Math.floor(falta / 86400000);
+      $("spHoras").textContent = Math.floor((falta % 86400000) / 3600000);
+      $("spMin").textContent = Math.floor((falta % 3600000) / 60000);
+      $("spSeg").textContent = Math.floor((falta % 60000) / 1000);
+    };
+    actualizar();
+    timerCumple = setInterval(actualizar, 1000);
+
+    // Tira del año
+    const mesHoy = new Date().getMonth();
+    let tira = "";
+    for (let i = 0; i < 12; i++) {
+      const delMes = lista.filter((x) => Number(String(x.cumple).split("-")[1]) === i + 1)
+        .sort((a, b) => Number(String(a.cumple).split("-")[2]) - Number(String(b.cumple).split("-")[2]));
+      const nombres = delMes.map((x) => `<i>🎂 ${esc(x.nombre)} <small class="muted">${Number(String(x.cumple).split("-")[2])}</small></i>`).join("");
+      tira += `<div class="mes ${i === mesHoy ? "actual" : ""}"><b>${meses[i]}</b>${nombres}</div>`;
+    }
+    $("tiraAnual").innerHTML = tira;
+  }
+
+  function lanzarConfeti() {
+    const emojis = ["✦", "🎂", "💜", "🎉", "⭐"];
+    let html = "";
+    for (let i = 0; i < 26; i++) {
+      html += `<span class="confeti" style="left:${Math.random() * 100}%;animation-duration:${2.5 + Math.random() * 3}s;animation-delay:${Math.random() * 3}s">${emojis[i % emojis.length]}</span>`;
+    }
+    $("spot").insertAdjacentHTML("beforeend", html);
+  }
+
+  // ---------- Banner de comeback ----------
+  let timerComeback = null;
+
+  function pintarComeback() {
+    const c = DATA.config || {};
+    if (String(c.comeback_activo).toUpperCase() !== "SI" || !c.comeback_titulo) return;
+
+    document.body.classList.add("con-banner");
+    $("comeback").style.display = "block";
+    $("navComeback").style.display = "";
+    $("cbTitulo").textContent = c.comeback_titulo;
+    $("cbSub").textContent = c.comeback_subtitulo || "";
+
+    const canciones = String(c.comeback_canciones || "").split(",").map((s) => s.trim()).filter(Boolean);
+    $("cbCanciones").innerHTML = canciones.map((s) => `<span class="cb-chip">♪ ${esc(s)}</span>`).join("");
+
+    if (c.comeback_imagen) {
+      const url = String(c.comeback_imagen).replace(/"/g, "%22");
+      $("cbCard").style.backgroundImage = `linear-gradient(100deg, rgba(var(--bg-rgb), .93) 30%, rgba(var(--bg-rgb), .25)), url("${url}")`;
+    }
+
+    if (c.comeback_link) {
+      $("cbBoton").href = c.comeback_link;
+      $("cbBotonTexto").textContent = c.comeback_link_texto || "Ver el MV";
+    } else {
+      $("cbBoton").style.display = "none";
+    }
+
+    const fecha = new Date(String(c.comeback_fecha || "").replace(" ", "T"));
+    if (isNaN(fecha)) { $("cbCuenta").style.display = "none"; return; }
+
+    $("cbFecha").textContent = "Lanzamiento: " + fecha.toLocaleString("es-PE", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
+
+    const actualizar = () => {
+      const falta = fecha - new Date();
+      if (falta <= 0) {
+        $("cbCuenta").style.display = "none";
+        $("cbYa").style.display = "block";
+        $("cbBoton").style.display = c.comeback_link ? "" : "none";
+        clearInterval(timerComeback);
+        return;
+      }
+      $("cbDias").textContent = Math.floor(falta / 86400000);
+      $("cbHoras").textContent = Math.floor((falta % 86400000) / 3600000);
+      $("cbMin").textContent = Math.floor((falta % 3600000) / 60000);
+      $("cbSeg").textContent = Math.floor((falta % 60000) / 1000);
+    };
+    actualizar();
+    timerComeback = setInterval(actualizar, 1000);
+  }
+
+  // ---------- Perfil de integrante (popup) ----------
+  function edadActual(texto) {
+    const p = String(texto).split("-").map(Number);
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - p[0];
+    if (hoy.getMonth() + 1 < p[1] || (hoy.getMonth() + 1 === p[1] && hoy.getDate() < p[2])) edad--;
+    return edad;
+  }
+
+  function abrirPerfil(nombre) {
+    const m = (DATA.integrantes || []).find((x) => x.nombre === nombre);
+    if (!m) return;
+
+    let stats = "";
+    if (m.cumple) {
+      const p = proximoCumple(m.cumple);
+      stats = `
+        <div class="stats mb-3">
+          <div><b>${edadActual(m.cumple)}</b><span>Años</span></div>
+          <div><b>${p.fecha.getDate()} ${meses[p.fecha.getMonth()]}</b><span>Cumpleaños</span></div>
+          <div><b>${p.esHoy ? "¡HOY!" : p.dias + " d"}</b><span>Faltan</span></div>
+        </div>`;
+    }
+
+    const redes = (DATA.redes || []).filter((r) => r.categoria === "integrante" && r.nombre === m.nombre && r.url);
+    const botonesRedes = redes.map((r) =>
+      `<a class="btn-red" href="${esc(r.url)}" target="_blank" rel="noopener"><i class="bi ${iconoRed(r.plataforma)}"></i> ${esc(r.usuario || r.plataforma)}</a>`).join("");
+
+    $("modalMiembroBody").innerHTML = `
+      <div class="cabecera" style="--c1:${esc(m.color || "var(--ac)")}">
+        <div class="avatar">${avatarHTML(m.nombre, m.foto)}</div>
+        <div class="rol eyebrow">${esc(m.rol)}</div>
+        <h3>${esc(m.nombre)}</h3>
+        ${m.nombre_real ? `<div class="real">${esc(m.nombre_real)}</div>` : ""}
+      </div>
+      ${stats}
+      <div class="cuerpo">
+        ${m.descripcion ? `<p>${esc(m.descripcion)}</p>` : ""}
+        ${m.dato_curioso ? `<p class="small"><span style="color:var(--gold)">✦ Dato curioso:</span> ${esc(m.dato_curioso)}</p>` : ""}
+        ${botonesRedes ? `<div class="mb-3">${botonesRedes}</div>` : ""}
+        <div class="d-grid"><button class="btn btn-main" id="btnEsMiBias">Es mi bias 💜</button></div>
+      </div>`;
+
+    $("btnEsMiBias").onclick = () => {
+      $("bias").value = m.nombre;
+      vistaPreviaCredencial();
+      bootstrap.Modal.getInstance($("modalMiembro")).hide();
+      $("unete").scrollIntoView({ behavior: "smooth" });
+    };
+
+    bootstrap.Modal.getOrCreateInstance($("modalMiembro")).show();
+  }
+
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest("[data-perfil]");
+    if (el) abrirPerfil(el.dataset.perfil);
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    const el = e.target.closest && e.target.closest("[data-perfil]");
+    if (el) abrirPerfil(el.dataset.perfil);
+  });
+
+  // ---------- Config, integrantes, eventos ----------
+  function pintarConfig() {
+    const c = DATA.config || {};
+    const grupo = c.nombre_grupo || "ATEEZ";
+    document.querySelectorAll(".nombreGrupo").forEach((el) => (el.textContent = grupo));
+    if (c.ciudad) $("heroCiudad").textContent = c.ciudad;
+    if (c.lema) $("heroLema").textContent = c.lema;
+    document.querySelectorAll(".linkWhatsApp").forEach((a) => (a.href = c.whatsapp_url || "#"));
+
+    const frase = "ATINY TACNA ✦ 8 MAKES 1 TEAM ✦ " + grupo + " ✦ GOLDEN HOUR ✦ ";
+    $("marquee").textContent = frase.repeat(10);
+  }
+
+  function pintarIntegrantes() {
+    const lista = DATA.integrantes || [];
+    $("listaIntegrantes").innerHTML = lista.map((m) => {
+      let cumple = "";
+      if (m.cumple) {
+        const p = proximoCumple(m.cumple);
+        cumple = `<div class="bday">🎂 ${p.fecha.getDate()} ${meses[p.fecha.getMonth()]} · ${p.esHoy ? "¡hoy!" : "en " + p.dias + " d"}</div>`;
+      }
+      return `
+        <div class="col-6 col-md-4 col-lg-3 reveal">
+          <div class="panel hover miembro" data-perfil="${esc(m.nombre)}" tabindex="0" role="button" style="--c1:${esc(m.color || "var(--ac)")}">
+            <div class="avatar">${avatarHTML(m.nombre, m.foto)}</div>
+            <div class="rol">${esc(m.rol)}</div>
+            <h4>${esc(m.nombre)}</h4>${cumple}
+            <div class="ver-perfil">Ver perfil <i class="bi bi-plus-circle"></i></div>
+          </div>
+        </div>`;
+    }).join("");
+
+    const opciones = lista.map((m) => `<option value="${esc(m.nombre)}">${esc(m.nombre)}</option>`).join("");
+    $("bias").innerHTML = `<option value="">Elige a tu favorito...</option>${opciones}<option value="Todos (OT8)">Amo a los ocho 💜 (OT8)</option>`;
+  }
+
+  function pintarEventos() {
+    const ahora = new Date();
+    const lista = (DATA.eventos || [])
+      .map((e) => Object.assign({}, e, { _f: new Date(e.fecha) }))
+      .filter((e) => e._f >= ahora)
+      .sort((a, b) => a._f - b._f);
+
+    if (lista.length === 0) {
+      $("listaEventos").innerHTML = `<div class="panel p-4 muted">Pronto anunciaremos nuevos eventos. ¡Únete al WhatsApp para enterarte primero! 💜</div>`;
+      return;
+    }
+    $("listaEventos").innerHTML = lista.map((e) => `
+      <div class="panel hover evento">
+        <div class="fecha-box"><b>${e._f.getDate()}</b><span>${meses[e._f.getMonth()]}</span></div>
+        <div>
+          <h6 class="fw-bold mb-1">${esc(e.titulo)}</h6>
+          <div class="muted small mb-1"><i class="bi bi-clock"></i> ${e._f.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })} &nbsp; <i class="bi bi-pin-map"></i> ${esc(e.lugar)}</div>
+          <div class="small">${esc(e.descripcion)}</div>
+        </div>
+      </div>`).join("");
+  }
+
+  // ---------- Eras ----------
+  function pintarEras() {
+    const extra = DATA && DATA.eras ? DATA.eras : [];
+    $("listaEras").innerHTML = ERAS.map((e) => {
+      const fila = extra.find((x) => x.id === e.id) || {};
+      const logo = fila.logo_url
+        ? `<img src="${esc(fila.logo_url)}" alt="Logo ${esc(e.nombre)}" loading="lazy">`
+        : `<span style="color:${e.gold}">Logo de esta era<br>(súbelo en la hoja Eras)</span>`;
+      return `
+        <div class="col-6 col-lg-3">
+          <div class="era ${e.id === eraActual ? "activa" : ""}" data-era="${e.id}" style="background:linear-gradient(145deg,${e.bg2},${e.bg});border-color:${e.gold}66;color:${e.tx}">
+            <span class="en-uso">EN USO</span>
+            <div class="logo-slot" style="border-color:${e.gold}55">${logo}</div>
+            <div class="swatches"><i style="background:${e.bg2}"></i><i style="background:${e.ac}"></i><i style="background:${e.gold}"></i><i style="background:${e.tx}"></i></div>
+            <h5 style="color:${e.gold}">${esc(e.nombre)}</h5>
+            <small>${esc(e.sub)}${fila.lanzamiento ? " · " + esc(fila.lanzamiento) : ""}</small>
+            ${fila.nota ? `<small style="opacity:.7">${esc(fila.nota)}</small>` : ""}
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  // ---------- Videos ----------
+  const VIDEOS_POR_PAGINA = 12;
+  let categoriaVideo = "Todos";
+  let textoVideo = "";
+  let videosVisibles = VIDEOS_POR_PAGINA;
+
+  function pintarVideos() {
+    const todos = DATA.videos || [];
+    const categorias = ["Todos"].concat([...new Set(todos.map((v) => v.categoria).filter(Boolean))]);
+    $("filtroVideos").innerHTML = categorias.map((c) =>
+      `<button class="chip ${c === categoriaVideo ? "active" : ""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
+
+    const lista = todos
+      .filter((v) => categoriaVideo === "Todos" || v.categoria === categoriaVideo)
+      .filter((v) => String(v.titulo).toLowerCase().indexOf(textoVideo) !== -1);
+
+    $("listaVideos").innerHTML = lista.slice(0, videosVisibles).map((v) => {
+      const id = youtubeId(v.url);
+      const mini = id ? `<img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="${esc(v.titulo)}" loading="lazy">` : "";
+      return `
+        <div class="col-sm-6 col-lg-4">
+          <div class="panel hover video" data-url="${esc(v.url)}">
+            <div class="thumb">${mini}<div class="play"><i class="bi bi-play-fill"></i></div></div>
+            <div class="info"><small>${esc(v.categoria)}</small><h6 class="fw-bold mb-0 mt-1">${esc(v.titulo)}</h6></div>
+          </div>
+        </div>`;
+    }).join("");
+
+    if (lista.length === 0) $("listaVideos").innerHTML = `<div class="col-12 text-center muted">No encontramos videos con esa búsqueda.</div>`;
+
+    $("btnMasVideos").classList.toggle("d-none", lista.length <= videosVisibles);
+    $("contadorVideos").textContent = lista.length > 0 ? "Mostrando " + Math.min(videosVisibles, lista.length) + " de " + lista.length + " videos" : "";
+  }
+
+  $("filtroVideos").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-cat]");
+    if (!btn) return;
+    categoriaVideo = btn.dataset.cat;
+    videosVisibles = VIDEOS_POR_PAGINA;
+    pintarVideos();
+  });
+
+  $("buscarVideo").addEventListener("input", (e) => {
+    textoVideo = e.target.value.trim().toLowerCase();
+    videosVisibles = VIDEOS_POR_PAGINA;
+    pintarVideos();
+  });
+
+  $("btnMasVideos").addEventListener("click", () => {
+    videosVisibles += VIDEOS_POR_PAGINA;
+    pintarVideos();
+  });
+
+  $("listaVideos").addEventListener("click", (e) => {
+    const tarjeta = e.target.closest("[data-url]");
+    if (!tarjeta || !tarjeta.dataset.url) return;
+    const id = youtubeId(tarjeta.dataset.url);
+    if (!id) { window.open(tarjeta.dataset.url, "_blank"); return; }
+    $("playerVideo").src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0";
+    new bootstrap.Modal($("modalVideo")).show();
+  });
+  $("modalVideo").addEventListener("hidden.bs.modal", () => ($("playerVideo").src = ""));
+
+  // ---------- Galería ----------
+  let tipoFoto = "grupo";
+
+  function pintarGaleria() {
+    const lista = (DATA.galeria || []).filter((f) => f.tipo === tipoFoto);
+    if (lista.length === 0) {
+      $("listaFotos").innerHTML = `<div class="col-12 text-center muted">Aún no hay fotos aquí. ¡Pronto subiremos más! 📸</div>`;
+      return;
+    }
+    $("listaFotos").innerHTML = lista.map((f) => {
+      const contenido = f.url ? `<img src="${esc(f.url)}" alt="${esc(f.titulo)}" loading="lazy">` : `<span class="vacia">📷</span>`;
+      return `<div class="col-6 col-md-4 col-lg-3"><div class="foto" data-url="${esc(f.url)}">${contenido}<div class="pie">${esc(f.titulo)}</div></div></div>`;
+    }).join("");
+  }
+
+  document.querySelectorAll("[data-tipo]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll("[data-tipo]").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      tipoFoto = btn.dataset.tipo;
+      pintarGaleria();
+    });
+  });
+
+  $("listaFotos").addEventListener("click", (e) => {
+    const foto = e.target.closest("[data-url]");
+    if (!foto || !foto.dataset.url) return;
+    $("fotoGrande").src = foto.dataset.url;
+    new bootstrap.Modal($("modalFoto")).show();
+  });
+
+  // ---------- Redes ----------
+  const iconos = { instagram: "bi-instagram", x: "bi-twitter-x", twitter: "bi-twitter-x", youtube: "bi-youtube", tiktok: "bi-tiktok", facebook: "bi-facebook", spotify: "bi-spotify", whatsapp: "bi-whatsapp", web: "bi-globe" };
+  const notasRed = {
+    fanclub: "Síguenos para ver fotos de nuestras juntadas y proyectos.",
+    ateezperu: "ATEEZ Perú es la fanbase principal del país: ellos organizan proyectos a nivel nacional.",
+    ateez: "Cuentas oficiales del grupo.",
+    integrante: "Cuentas personales de cada integrante."
+  };
+  let categoriaRed = "fanclub";
+
+  function iconoRed(plataforma) {
+    return iconos[String(plataforma).toLowerCase()] || "bi-link-45deg";
+  }
+
+  function pintarRedes() {
+    const filas = (DATA.redes || []).filter((r) => r.categoria === categoriaRed);
+    $("notaRed").textContent = notasRed[categoriaRed] || "";
+
+    if (categoriaRed === "integrante") {
+      const nombres = [...new Set(filas.map((r) => r.nombre))];
+      $("listaRedes").innerHTML = nombres.map((n) => {
+        const integrante = (DATA.integrantes || []).find((m) => m.nombre === n) || {};
+        const botones = filas.filter((r) => r.nombre === n).map((r) => {
+          const activo = r.url ? "" : "off";
+          return `<a class="btn-red ${activo}" href="${esc(r.url || "#")}" target="_blank" rel="noopener"><i class="bi ${iconoRed(r.plataforma)}"></i> ${esc(r.usuario || r.plataforma)}</a>`;
+        }).join("");
+        return `
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="panel hover red-miembro" style="--c1:${esc(integrante.color || "var(--ac)")}">
+              <div class="avatar">${avatarHTML(n, integrante.foto)}</div>
+              <h5 class="display mb-1">${esc(n)}</h5>${botones}
+            </div>
+          </div>`;
+      }).join("");
+      return;
+    }
+
+    $("listaRedes").innerHTML = filas.map((r) => `
+      <div class="col-sm-6 col-lg-4">
+        <a class="panel hover red ${r.url ? "" : "off"}" href="${esc(r.url || "#")}" target="_blank" rel="noopener">
+          <i class="bi ${iconoRed(r.plataforma)} ico"></i>
+          <div><b>${esc(r.plataforma)}</b><small>${esc(r.usuario || "Próximamente")}</small></div>
+          <i class="bi bi-arrow-up-right ir"></i>
+        </a>
+      </div>`).join("");
+  }
+
+  $("tabsRedes").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-red]");
+    if (!btn) return;
+    document.querySelectorAll("[data-red]").forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    categoriaRed = btn.dataset.red;
+    pintarRedes();
+  });
+
+  function pintarFooterRedes() {
+    const filas = (DATA.redes || []).filter((r) => r.categoria === "fanclub" && r.url && r.plataforma.toLowerCase() !== "whatsapp");
+    $("redesFoot").innerHTML = filas.map((r) =>
+      `<a href="${esc(r.url)}" target="_blank" rel="noopener" aria-label="${esc(r.plataforma)}"><i class="bi ${iconoRed(r.plataforma)}"></i></a>`).join("");
+  }
+
+  // ---------- Ranking ----------
+  function pintarRanking() {
+    const lista = DATA.ranking || [];
+    if (lista.length === 0) {
+      $("listaRanking").innerHTML = `<p class="muted mb-0">Todavía no hay votos. ¡Sé el primero en registrarte!</p>`;
+      return;
+    }
+    const maximo = Math.max(...lista.map((r) => r.total));
+    $("listaRanking").innerHTML = lista.map((r, i) => `
+      <div class="barra-fila">
+        <div class="fw-semibold text-truncate">${i === 0 ? "👑 " : ""}${esc(r.bias)}</div>
+        <div class="barra"><i data-ancho="${Math.round((r.total / maximo) * 100)}"></i></div>
+        <div class="text-end fw-bold">${esc(r.total)}</div>
+      </div>`).join("");
+    setTimeout(() => document.querySelectorAll(".barra i").forEach((b) => (b.style.width = b.dataset.ancho + "%")), 300);
+  }
+
+  // ---------- Credencial ----------
+  let credencialFinal = false;
+
+  function pintarCredencial(c) {
+    const nombre = c.nombre || "Tu nombre";
+    const bias = c.bias || "—";
+    const integrante = (DATA.integrantes || []).find((m) => m.nombre === c.bias);
+    $("credNombre").textContent = nombre;
+    $("credBias").textContent = bias;
+    $("credNumero").textContent = c.numero || "TAC-????";
+    $("credDesde").textContent = c.desde || "--/----";
+    $("credAvatar").innerHTML = integrante ? avatarHTML(integrante.nombre, integrante.foto, true) : (c.bias ? "💜" : "?");
+  }
+
+  function vistaPreviaCredencial() {
+    if (credencialFinal) return;
+    pintarCredencial({
+      nombre: ($("nombres").value + " " + $("apellidos").value).trim(),
+      bias: $("bias").value
+    });
+  }
+
+  function mostrarCredencialFinal(c) {
+    credencialFinal = true;
+    pintarCredencial(c);
+    $("btnDescargar").disabled = false;
+    $("credNota").textContent = "¡Lista! Descárgala y compártela con orgullo ATINY 💜";
+    try { localStorage.setItem("ateezCredencial", JSON.stringify(c)); } catch (err) {}
+  }
+
+  ["nombres", "apellidos"].forEach((id) => $(id).addEventListener("input", vistaPreviaCredencial));
+  $("bias").addEventListener("change", vistaPreviaCredencial);
+
+  // Efecto de inclinación 3D
+  $("credWrap").addEventListener("mousemove", (e) => {
+    const r = $("credWrap").getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    $("cred").style.transform = `rotateY(${x * 14}deg) rotateX(${-y * 14}deg)`;
+  });
+  $("credWrap").addEventListener("mouseleave", () => ($("cred").style.transform = ""));
+
+  $("btnDescargar").addEventListener("click", async () => {
+    $("errorDescarga").classList.add("d-none");
+    try {
+      if (!window.html2canvas) throw new Error("No se cargó la herramienta de descarga.");
+      $("cred").style.transform = "";
+      const canvas = await html2canvas($("cred"), { backgroundColor: null, scale: 3, useCORS: true });
+      const a = document.createElement("a");
+      a.download = "credencial-atiny-tacna.png";
+      a.href = canvas.toDataURL("image/png");
+      a.click();
+    } catch (err) {
+      $("errorDescarga").textContent = "No se pudo descargar. Toma una captura de pantalla de tu credencial.";
+      $("errorDescarga").classList.remove("d-none");
+    }
+  });
+
+  // ---------- Formulario de registro ----------
+  const form = $("formRegistro");
+  $("fechaNacimiento").max = new Date().toISOString().split("T")[0];
+
+  function calcularEdad(fechaTexto) {
+    const nac = new Date(fechaTexto + "T00:00:00");
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - nac.getFullYear();
+    const yaCumplio = hoy.getMonth() > nac.getMonth() || (hoy.getMonth() === nac.getMonth() && hoy.getDate() >= nac.getDate());
+    return yaCumplio ? edad : edad - 1;
+  }
+
+  $("fechaNacimiento").addEventListener("change", (e) => {
+    $("edad").value = e.target.value ? calcularEdad(e.target.value) + " años" : "";
+  });
+  $("celular").addEventListener("input", (e) => (e.target.value = e.target.value.replace(/\D/g, "")));
+  $("recCelular").addEventListener("input", (e) => (e.target.value = e.target.value.replace(/\D/g, "")));
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    $("errorForm").classList.add("d-none");
+    if (!form.checkValidity()) { form.classList.add("was-validated"); return; }
+
+    const datos = {
+      nombres: $("nombres").value.trim(),
+      apellidos: $("apellidos").value.trim(),
+      celular: $("celular").value.trim(),
+      nombre_whatsapp: $("nombreWhatsapp").value.trim(),
+      fecha_nacimiento: $("fechaNacimiento").value,
+      edad: calcularEdad($("fechaNacimiento").value),
+      correo: $("correo").value.trim().toLowerCase(),
+      bias: $("bias").value,
+      atiny_desde: $("atinyDesde").value,
+      web: $("web").value
+    };
+
+    $("btnTexto").classList.add("d-none");
+    $("btnCargando").classList.remove("d-none");
+    $("btnEnviar").disabled = true;
+
+    try {
+      let respuesta;
+      if (MODO_DEMO) {
+        await esperar(900);
+        const hoy = new Date();
+        respuesta = { ok: true, numero: "TAC-0034", desde: String(hoy.getMonth() + 1).padStart(2, "0") + "/" + hoy.getFullYear() };
+      } else {
+        // text/plain evita el preflight de CORS con Apps Script
+        const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(datos) });
+        respuesta = await res.json();
+      }
+      if (!respuesta.ok) throw new Error(respuesta.error || "No se pudo completar el registro.");
+
+      $("exitoNombre").textContent = datos.nombres.split(" ")[0];
+      form.classList.add("d-none");
+      $("exito").classList.remove("d-none");
+      mostrarCredencialFinal({ nombre: datos.nombres + " " + datos.apellidos, bias: datos.bias, numero: respuesta.numero, desde: respuesta.desde });
+    } catch (err) {
+      $("errorForm").textContent = err.message || "Ocurrió un error. Inténtalo de nuevo.";
+      $("errorForm").classList.remove("d-none");
+    } finally {
+      $("btnTexto").classList.remove("d-none");
+      $("btnCargando").classList.add("d-none");
+      $("btnEnviar").disabled = false;
+    }
+  });
+
+  // ---------- Recuperar credencial ----------
+  $("formRecuperar").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    $("errorRecuperar").classList.add("d-none");
+    const celular = $("recCelular").value.trim();
+    const correo = $("recCorreo").value.trim().toLowerCase();
+    try {
+      if (!/^9\d{8}$/.test(celular) || !correo) throw new Error("Escribe tu celular (9 dígitos) y tu correo.");
+      let r;
+      if (MODO_DEMO) {
+        await esperar(500);
+        r = { ok: true, nombre: "Miembro de ejemplo", bias: "San", numero: "TAC-0007", desde: "11/2026" };
+      } else {
+        const res = await fetch(API_URL + "?action=credencial&celular=" + encodeURIComponent(celular) + "&correo=" + encodeURIComponent(correo));
+        r = await res.json();
+      }
+      if (!r.ok) throw new Error(r.error || "No encontramos tu registro.");
+      mostrarCredencialFinal(r);
+      document.getElementById("credWrap").scrollIntoView({ behavior: "smooth", block: "center" });
+    } catch (err) {
+      $("errorRecuperar").textContent = err.message;
+      $("errorRecuperar").classList.remove("d-none");
+    }
+  });
+
+  // ---------- Selector de era ----------
+  $("eraBtn").addEventListener("click", () => $("eraFab").classList.toggle("open"));
+  document.addEventListener("click", (e) => {
+    const dot = e.target.closest("[data-era]");
+    if (dot) { aplicarEra(dot.dataset.era, true); return; }
+    if (!e.target.closest("#eraFab")) $("eraFab").classList.remove("open");
+  });
+
+  // ---------- Efectos ----------
+  window.addEventListener("scroll", () => $("nav").classList.toggle("scrolled", window.scrollY > 40));
+
+  document.querySelectorAll("#menu .nav-link").forEach((a) =>
+    a.addEventListener("click", () => {
+      const menu = bootstrap.Collapse.getInstance($("menu"));
+      if (menu) menu.hide();
+    }));
+
+  const observador = new IntersectionObserver((entradas) => {
+    entradas.forEach((en) => {
+      if (en.isIntersecting) { en.target.classList.add("in"); observador.unobserve(en.target); }
+    });
+  }, { threshold: 0.12 });
+
+  function observarReveal() {
+    document.querySelectorAll(".reveal:not(.in)").forEach((el) => observador.observe(el));
+  }
+
+  // ---------- Inicio ----------
+  function esqueletos(id, cantidad, claseCaja, claseCol) {
+    let html = "";
+    for (let i = 0; i < cantidad; i++) html += `<div class="${claseCol}"><div class="skel ${claseCaja}"></div></div>`;
+    $(id).innerHTML = html;
+  }
+
+  function mostrarCarga() {
+    const barra = document.createElement("div");
+    barra.id = "barraCarga";
+    const aviso = document.createElement("div");
+    aviso.id = "avisoCarga";
+    aviso.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Cargando datos del fan club...';
+    document.body.appendChild(barra);
+    document.body.appendChild(aviso);
+    setTimeout(() => { barra.style.width = "70%"; }, 50);
+    // Si tarda, mostramos el aviso (el servidor de Google a veces despierta lento)
+    setTimeout(() => { aviso.style.display = "flex"; }, 1500);
+
+    esqueletos("listaIntegrantes", 8, "skel-card", "col-6 col-md-4 col-lg-3");
+    esqueletos("listaVideos", 6, "skel-video", "col-md-6 col-lg-4");
+    esqueletos("listaFotos", 8, "skel-foto", "col-6 col-md-4 col-lg-3");
+    esqueletos("listaRedes", 6, "skel-fila", "col-md-6 col-lg-4");
+    esqueletos("listaEventos", 2, "skel-evento", "");
+    $("spot").innerHTML = '<div class="skel skel-spot"></div>';
+    $("listaRanking").innerHTML = '<div class="skel skel-fila"></div>'.repeat(5);
+  }
+
+  function terminarCarga() {
+    const barra = $("barraCarga");
+    const aviso = $("avisoCarga");
+    if (barra) { barra.style.width = "100%"; setTimeout(() => { barra.style.opacity = "0"; }, 400); setTimeout(() => barra.remove(), 900); }
+    if (aviso) aviso.remove();
+    // Las tarjetas aparecen una por una
+    ["listaIntegrantes", "listaVideos", "listaFotos", "listaRedes", "listaEventos", "listaRanking"].forEach((id) => $(id).classList.add("aparece"));
+  }
+
+  // Guardamos los últimos datos en el navegador: la segunda visita aparece al instante
+  const CLAVE_CACHE = "ateezDatos";
+  function leerCache() {
+    try { return JSON.parse(localStorage.getItem(CLAVE_CACHE) || "null"); } catch (err) { return null; }
+  }
+  function guardarCache(datos) {
+    try { localStorage.setItem(CLAVE_CACHE, JSON.stringify(datos)); } catch (err) {}
+  }
+
+  function pintarDatos() {
+    pintarConfig();
+    pintarComeback();
+    pintarIntegrantes();
+    pintarCumples();
+    pintarEventos();
+    pintarVideos();
+    pintarGaleria();
+    pintarRedes();
+    pintarFooterRedes();
+    pintarRanking();
+  }
+
+  (async function iniciar() {
+    const guardados = MODO_DEMO ? null : leerCache();
+    const eraElegida = leerEraGuardada();
+
+    if (guardados) {
+      DATA = guardados;           // datos de la última visita: se muestran al instante
+    } else {
+      mostrarCarga();             // primera visita: esqueletos mientras llegan los datos
+      try { DATA = await cargarDatos(); } catch (err) { console.error(err); DATA = datosDemo(); }
+      if (!MODO_DEMO) guardarCache(DATA);
+    }
+
+    // Si la persona no eligió era, se usa la del comeback (si hay) o la de Tacna
+    const eraInicial = eraElegida || (DATA.config && DATA.config.comeback_era) || "tacna";
+
+    pintarDatos();
+    aplicarEra(eraInicial, Boolean(eraElegida));   // también pinta las eras y los puntos del selector
+    pintarCredencial({});
+    terminarCarga();
+
+    // Si ya se registró antes en este navegador, mostramos su credencial
+    try {
+      const guardada = JSON.parse(localStorage.getItem("ateezCredencial") || "null");
+      if (guardada) mostrarCredencialFinal(guardada);
+    } catch (err) {}
+
+    // Si viene de registro.html, mostramos el aviso y bajamos a la credencial
+    if (new URLSearchParams(location.search).get("registrado")) $("avisoRegistro").classList.remove("d-none");
+    observarReveal();
+    if (location.hash === "#unete") setTimeout(() => $("unete").scrollIntoView(), 300);
+
+    // Con datos guardados, pedimos los nuevos en segundo plano y actualizamos solo si cambiaron
+    if (guardados) {
+      try {
+        const nuevos = await cargarDatos();
+        if (JSON.stringify(nuevos) !== JSON.stringify(guardados)) {
+          DATA = nuevos;
+          guardarCache(nuevos);
+          pintarDatos();
+          observarReveal();
+        }
+      } catch (err) { console.error(err); }
+    }
+  })();
+</script>
+</body>
+</html>

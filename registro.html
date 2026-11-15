@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Regístrate · ATINY Tacna</title>
+  <link rel="icon" type="image/svg+xml" href="icono.svg">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="description" content="Regístrate en el fan club ATINY Tacna (ATEEZ) y obtén tu credencial de miembro.">
+  <meta name="theme-color" content="#0e0000" id="metaTema">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;1,700;1,800&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0e0000;  --bg2: #1f0306;
+      --ac: #9c0512;  --ac2: #64090c;
+      --gold: #f8d794; --tx: #efeacd; --on-ac: #efeacd;
+      --bg-rgb: 14,0,0; --ac-rgb: 156,5,18; --gold-rgb: 248,215,148; --tx-rgb: 239,234,205;
+      --muted: rgba(var(--tx-rgb), .68);
+      --line: rgba(var(--gold-rgb), .22);
+      --card: rgba(var(--tx-rgb), .05);
+      --display: 'Barlow Condensed', sans-serif;
+      --serif: 'Cormorant Garamond', serif;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--tx); min-height: 100vh; overflow-x: hidden; }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1; opacity: .3;
+      background: radial-gradient(ellipse at 50% 0%, rgba(var(--ac-rgb), .6), transparent 60%),
+                  repeating-linear-gradient(90deg, rgba(var(--ac-rgb), .5) 0 26px, rgba(var(--bg-rgb), .9) 26px 52px);
+      -webkit-mask-image: linear-gradient(180deg, #000, transparent 70%); mask-image: linear-gradient(180deg, #000, transparent 70%); }
+
+    h1, h3, .display { font-family: var(--display); font-style: italic; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; }
+    .eyebrow { color: var(--gold); font-weight: 700; font-size: .78rem; letter-spacing: 4px; text-transform: uppercase; }
+    .muted { color: var(--muted); }
+    .brand { font-family: var(--display); font-style: italic; font-weight: 800; font-size: 1.9rem; letter-spacing: 1px; color: var(--tx); text-decoration: none; line-height: 1; }
+    .brand small { display: block; font-family: 'DM Sans', sans-serif; font-style: normal; font-weight: 700; font-size: .6rem; letter-spacing: 4px; color: var(--gold); }
+
+    .btn-main { background: linear-gradient(100deg, var(--ac), var(--ac2)); color: var(--on-ac); border: 1px solid rgba(var(--gold-rgb), .4); font-weight: 700; border-radius: 6px; padding: 12px 28px; box-shadow: 0 6px 28px rgba(var(--ac-rgb), .45); transition: .25s; }
+    .btn-main:hover { color: var(--on-ac); transform: translateY(-2px); box-shadow: 0 10px 36px rgba(var(--ac-rgb), .7); }
+    .btn-line { border: 1px solid var(--gold); color: var(--gold); background: transparent; border-radius: 6px; padding: 11px 24px; font-weight: 700; transition: .25s; text-decoration: none; display: inline-block; }
+    .btn-line:hover { background: var(--gold); color: var(--bg); }
+    .btn-wa { background: #25d366; color: #06230f; font-weight: 800; border: 0; border-radius: 6px; padding: 12px 28px; }
+    .btn-wa:hover { background: #3be67d; color: #06230f; }
+
+    .volver { color: var(--gold); text-decoration: none; font-weight: 500; font-size: .92rem; }
+    .volver:hover { color: var(--tx); }
+
+    .titulo { font-size: clamp(2.6rem, 9vw, 4.6rem); line-height: .9; margin: 8px 0 10px; }
+    .titulo em { font-family: var(--serif); font-weight: 500; text-transform: none; color: var(--gold); }
+
+    .chip-cb { display: inline-flex; gap: 8px; align-items: center; padding: 7px 16px; border: 1px solid var(--gold); border-radius: 50px; font-size: .82rem; color: var(--gold); background: rgba(var(--bg-rgb), .6); text-decoration: none; }
+    .chip-cb:hover { background: var(--gold); color: var(--bg); }
+    .chip-cb i.punto { width: 8px; height: 8px; border-radius: 50%; background: #e11; animation: pulso 1.2s infinite; }
+    @keyframes pulso { 50% { opacity: .2; } }
+
+    .panel { background: rgba(var(--bg-rgb), .75); backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 16px; padding: 30px; }
+    .form-control, .form-select { background-color: rgba(var(--tx-rgb), .06); border: 1px solid var(--line); border-radius: 8px; padding: 11px 14px; color: var(--tx); }
+    .form-control:focus, .form-select:focus { background-color: rgba(var(--tx-rgb), .1); border-color: var(--gold); box-shadow: 0 0 0 .2rem rgba(var(--gold-rgb), .2); color: var(--tx); }
+    .form-control::placeholder { color: rgba(var(--tx-rgb), .4); }
+    .form-select option { background: var(--bg2); color: var(--tx); }
+    .input-group-text { background: rgba(var(--tx-rgb), .1); border: 1px solid var(--line); color: var(--muted); border-radius: 8px 0 0 8px; }
+    .input-group .form-control { border-radius: 0 8px 8px 0; }
+    .form-label { font-weight: 500; font-size: .88rem; }
+    .form-check-input:checked { background-color: var(--ac); border-color: var(--gold); }
+    .trampa { position: absolute; left: -9999px; }
+
+    .exito { text-align: center; padding: 14px 0; }
+    .exito .emoji { font-size: 3.6rem; display: inline-block; animation: latido 1.3s infinite; }
+    @keyframes latido { 50% { transform: scale(1.15); } }
+    .barra-redir { height: 6px; border-radius: 6px; background: rgba(var(--tx-rgb), .12); overflow: hidden; margin: 18px auto; max-width: 320px; }
+    .barra-redir i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--ac), var(--gold)); }
+
+    @media (max-width: 575px) { .panel { padding: 20px; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  </style>
+</head>
+
+<body>
+  <header class="container py-3 d-flex justify-content-between align-items-center">
+    <a class="brand" href="index.html"><span class="nombreGrupo">ATEEZ</span><small>ATINY TACNA</small></a>
+    <a class="volver" href="index.html"><i class="bi bi-arrow-left"></i> Ir a la página principal</a>
+  </header>
+
+  <main class="container pb-5" style="max-width:760px">
+    <div class="text-center pt-3 pb-4">
+      <a href="index.html#comeback" class="chip-cb mb-3 d-none" id="chipComeback"><i class="punto"></i> <span id="chipComebackTexto"></span></a>
+      <div class="eyebrow">Fan club · Tacna, Perú</div>
+      <h1 class="titulo">Únete a <em>ATINY Tacna</em></h1>
+      <p class="muted">Llena tus datos y recibe tu credencial de miembro. Solo toma un minuto.</p>
+    </div>
+
+    <div class="panel">
+      <!-- Formulario -->
+      <form id="formRegistro" novalidate>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="nombres">Nombres *</label>
+            <input type="text" class="form-control" id="nombres" placeholder="Ej: María Fernanda" required minlength="2" maxlength="60" autocomplete="given-name">
+            <div class="invalid-feedback">Escribe tus nombres.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="apellidos">Apellidos *</label>
+            <input type="text" class="form-control" id="apellidos" placeholder="Ej: Quispe Mamani" required minlength="2" maxlength="60" autocomplete="family-name">
+            <div class="invalid-feedback">Escribe tus apellidos.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="celular">Número de celular *</label>
+            <div class="input-group has-validation">
+              <span class="input-group-text">+51</span>
+              <input type="tel" class="form-control" id="celular" placeholder="987654321" required pattern="9[0-9]{8}" maxlength="9" inputmode="numeric" autocomplete="tel-national">
+              <div class="invalid-feedback">Debe tener 9 dígitos y empezar con 9.</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="nombreWhatsapp">Nombre en WhatsApp *</label>
+            <input type="text" class="form-control" id="nombreWhatsapp" placeholder="Cómo apareces en WhatsApp" required maxlength="60">
+            <div class="invalid-feedback">Escribe tu nombre de WhatsApp.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="fechaNacimiento">Fecha de nacimiento *</label>
+            <input type="date" class="form-control" id="fechaNacimiento" required min="1940-01-01">
+            <div class="invalid-feedback">Elige tu fecha de nacimiento.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="edad">Edad</label>
+            <input type="text" class="form-control" id="edad" placeholder="Se calcula sola" readonly>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="correo">Correo electrónico *</label>
+            <input type="email" class="form-control" id="correo" placeholder="tucorreo@gmail.com" required maxlength="100" autocomplete="email">
+            <div class="invalid-feedback">Escribe un correo válido.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="bias">¿Quién es tu bias? *</label>
+            <select class="form-select" id="bias" required><option value="">Elige a tu favorito...</option></select>
+            <div class="invalid-feedback">Elige a tu bias.</div>
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="atinyDesde">¿Desde qué año eres ATINY? <small class="muted">(opcional)</small></label>
+                <select class="form-select" id="atinyDesde">
+                  <option value="">Elige un año...</option>
+                  <option>2018</option><option>2019</option><option>2020</option><option>2021</option>
+                  <option>2022</option><option>2023</option><option>2024</option><option>2025</option><option>2026</option>
+                </select>
+          </div>
+          <div class="col-12">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="acepto" required>
+              <label class="form-check-label small muted" for="acepto">Acepto que el fan club use mis datos solo para contactarme y organizar actividades. *</label>
+              <div class="invalid-feedback">Debes aceptar para continuar.</div>
+            </div>
+          </div>
+          <input type="text" class="trampa" id="web" tabindex="-1" autocomplete="off">
+          <div class="col-12">
+            <div class="alert alert-danger d-none" id="errorForm"></div>
+            <button type="submit" class="btn btn-main btn-lg w-100" id="btnEnviar">
+              <span id="btnTexto"><i class="bi bi-person-vcard"></i> Registrarme y obtener mi credencial</span>
+              <span id="btnCargando" class="d-none"><span class="spinner-border spinner-border-sm"></span> Enviando...</span>
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Éxito + redirección -->
+      <div class="exito d-none" id="exito">
+        <div class="emoji">💜</div>
+        <h3 class="mt-2" style="font-size:2.4rem">¡Bienvenid@, <span id="exitoNombre"></span>!</h3>
+        <p class="muted mb-1">Ya eres parte de ATINY Tacna. Te llevamos a la página principal para ver tu credencial…</p>
+        <div class="barra-redir"><i id="barraRedir"></i></div>
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+          <a href="index.html?registrado=1#unete" class="btn btn-main" id="btnIrPrincipal"><i class="bi bi-house-heart"></i> Ir ahora a la página principal</a>
+          <a href="#" class="btn btn-wa linkWhatsApp" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i> Unirme al WhatsApp</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center small muted mt-4">
+      ¿Ya te registraste? <a class="volver" href="index.html#unete">Recupera tu credencial aquí</a>
+    </p>
+  </main>
+
+  <footer class="text-center small muted pb-4 px-3">
+    Fan club hecho por fans, sin fines de lucro y oficial, pertenecientes a las sedes de Ateez Perú. Hecho con 💜 en Tacna, Perú.
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="tema.js"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const PAGINA_PRINCIPAL = "index.html?registrado=1#unete";
+    const SEGUNDOS_REDIRECCION = 6;
+
+    let DATA = { config: {}, integrantes: [] };
+
+    // Datos de ejemplo (modo demo)
+    const DEMO = {
+      config: { nombre_grupo: "ATEEZ", whatsapp_url: "https://chat.whatsapp.com/", comeback_activo: "SI", comeback_titulo: "GOLDEN HOUR : Part.6", comeback_era: "gh6" },
+      integrantes: ["Hongjoong", "Seonghwa", "Yunho", "Yeosang", "San", "Mingi", "Wooyoung", "Jongho"].map((n) => ({ nombre: n }))
+    };
+
+    function esc(texto) {
+      const div = document.createElement("div");
+      div.textContent = texto == null ? "" : texto;
+      return div.innerHTML;
+    }
+
+    async function cargarDatos() {
+      if (MODO_DEMO) return DEMO;
+      const res = await fetch(API_URL + "?action=data");
+      return await res.json();
+    }
+
+    function pintarDatos() {
+      const c = DATA.config || {};
+      document.querySelectorAll(".nombreGrupo").forEach((el) => (el.textContent = c.nombre_grupo || "ATEEZ"));
+      document.querySelectorAll(".linkWhatsApp").forEach((a) => (a.href = c.whatsapp_url || "#"));
+
+      const opciones = (DATA.integrantes || []).map((m) => `<option value="${esc(m.nombre)}">${esc(m.nombre)}</option>`).join("");
+      $("bias").innerHTML = `<option value="">Elige a tu favorito...</option>${opciones}<option value="Todos (OT8)">Amo a los ocho 💜 (OT8)</option>`;
+
+      if (String(c.comeback_activo).toUpperCase() === "SI" && c.comeback_titulo) {
+        $("chipComebackTexto").textContent = "Temporada de comeback: " + c.comeback_titulo;
+        $("chipComeback").classList.remove("d-none");
+      }
+    }
+
+    // ---------- Edad automática ----------
+    $("fechaNacimiento").max = new Date().toISOString().split("T")[0];
+
+    function calcularEdad(fechaTexto) {
+      const nac = new Date(fechaTexto + "T00:00:00");
+      const hoy = new Date();
+      const edad = hoy.getFullYear() - nac.getFullYear();
+      const yaCumplio = hoy.getMonth() > nac.getMonth() || (hoy.getMonth() === nac.getMonth() && hoy.getDate() >= nac.getDate());
+      return yaCumplio ? edad : edad - 1;
+    }
+
+    $("fechaNacimiento").addEventListener("change", (e) => {
+      $("edad").value = e.target.value ? calcularEdad(e.target.value) + " años" : "";
+    });
+    $("celular").addEventListener("input", (e) => (e.target.value = e.target.value.replace(/\D/g, "")));
+
+    const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    // ---------- Enviar ----------
+    const form = $("formRegistro");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      $("errorForm").classList.add("d-none");
+      if (!form.checkValidity()) { form.classList.add("was-validated"); return; }
+
+      const datos = {
+        nombres: $("nombres").value.trim(),
+        apellidos: $("apellidos").value.trim(),
+        celular: $("celular").value.trim(),
+        nombre_whatsapp: $("nombreWhatsapp").value.trim(),
+        fecha_nacimiento: $("fechaNacimiento").value,
+        edad: calcularEdad($("fechaNacimiento").value),
+        correo: $("correo").value.trim().toLowerCase(),
+        bias: $("bias").value,
+        atiny_desde: $("atinyDesde").value,
+        web: $("web").value
+      };
+
+      $("btnTexto").classList.add("d-none");
+      $("btnCargando").classList.remove("d-none");
+      $("btnEnviar").disabled = true;
+
+      try {
+        let respuesta;
+        if (MODO_DEMO) {
+          await esperar(900);
+          const hoy = new Date();
+          respuesta = { ok: true, numero: "TAC-0034", desde: String(hoy.getMonth() + 1).padStart(2, "0") + "/" + hoy.getFullYear() };
+        } else {
+          // text/plain evita el preflight de CORS con Apps Script
+          const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(datos) });
+          respuesta = await res.json();
+        }
+        if (!respuesta.ok) throw new Error(respuesta.error || "No se pudo completar el registro.");
+
+        // Guardamos la credencial para que la página principal la muestre
+        try {
+          localStorage.setItem("ateezCredencial", JSON.stringify({
+            nombre: datos.nombres + " " + datos.apellidos, bias: datos.bias, numero: respuesta.numero, desde: respuesta.desde
+          }));
+        } catch (err) {}
+
+        mostrarExitoYRedirigir(datos.nombres.split(" ")[0]);
+      } catch (err) {
+        $("errorForm").innerHTML = esc(err.message || "Ocurrió un error. Inténtalo de nuevo.") +
+          ' <a class="alert-link" href="index.html#unete">Recuperar mi credencial</a>';
+        $("errorForm").classList.remove("d-none");
+        $("btnTexto").classList.remove("d-none");
+        $("btnCargando").classList.add("d-none");
+        $("btnEnviar").disabled = false;
+      }
+    });
+
+    function mostrarExitoYRedirigir(nombre) {
+      $("exitoNombre").textContent = nombre;
+      form.classList.add("d-none");
+      $("exito").classList.remove("d-none");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      // Barra de progreso y redirección automática
+      const barra = $("barraRedir");
+      barra.style.transition = "width " + SEGUNDOS_REDIRECCION + "s linear";
+      requestAnimationFrame(() => requestAnimationFrame(() => (barra.style.width = "100%")));
+      setTimeout(() => (window.location.href = PAGINA_PRINCIPAL), SEGUNDOS_REDIRECCION * 1000);
+    }
+
+    // ---------- Inicio ----------
+    (async function iniciar() {
+      // Se aplica la era que la persona eligió antes; si no, se ajusta cuando lleguen los datos
+      const elegida = leerEraGuardada();
+      if (elegida) aplicarTema(elegida);
+
+      try { DATA = await cargarDatos(); } catch (err) { console.error(err); DATA = DEMO; }
+      pintarDatos();
+
+      if (!elegida) aplicarTema((DATA.config && DATA.config.comeback_era) || "tacna", false);
+    })();
+  </script>
+</body>
+</html>
