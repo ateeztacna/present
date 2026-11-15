@@ -406,6 +406,7 @@
 
     // ---------- Inicio ----------
     (async function iniciar() {
+      const repintarEras = montarSelectorEra();
       const elegida = leerEraGuardada();
       if (elegida) aplicarTema(elegida);
       DATA = { config: {}, integrantes: DEMO.integrantes };
@@ -419,7 +420,7 @@
           if (miembro) pintarCredencial();
         }
       } catch (err) { console.error(err); }
-      if (!elegida) aplicarTema((DATA.config && DATA.config.comeback_era) || "tacna", false);
+      if (!elegida) { aplicarTema((DATA.config && DATA.config.comeback_era) || "tacna", false); repintarEras(); }
     })();
   </script>
 </body>
