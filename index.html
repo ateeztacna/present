@@ -630,7 +630,6 @@
           <p class="muted small mb-3" id="credNota">Así se verá tu credencial. Cambia de era con el botón 🎨 y cambia también sus colores.</p>
           <button class="btn btn-line" id="btnDescargar" disabled><i class="bi bi-download"></i> Descargar credencial (PNG)</button>
           <div class="small text-danger mt-2 d-none" id="errorDescarga"></div>
-          <div class="mt-2"><button class="btn btn-link btn-sm text-decoration-none p-0 muted" id="btnOlvidar" type="button"><i class="bi bi-box-arrow-right"></i> Quitar mi credencial de este dispositivo</button></div>
 
           <!-- Cambiar bias (solo cuando la credencial ya está lista) -->
           <div class="mt-3 d-none" id="boxCambiarBias">
@@ -1319,11 +1318,6 @@
     pintarCredencial(c);
     $("btnDescargar").disabled = false;
     $("credNota").textContent = "¡Lista! Descárgala y compártela con orgullo ATINY 💜";
-    // En el navegador solo se guarda lo que muestra la credencial; el celular y el correo NO se guardan
-    try {
-      localStorage.setItem("ateezCredencial", JSON.stringify({ nombre: c.nombre, bias: c.bias, numero: c.numero, desde: c.desde }));
-    } catch (err) {}
-
     // Cambiar bias: necesita el celular y el correo con los que se registró
     const tieneDatos = Boolean(c.celular && c.correo);
     $("boxCambiarBias").classList.remove("d-none");
@@ -1331,12 +1325,6 @@
     $("avisoBiasSinDatos").classList.toggle("d-none", tieneDatos);
     if (c.bias) $("cambiarBias").value = c.bias;
   }
-
-  $("btnOlvidar").addEventListener("click", () => {
-    try { localStorage.removeItem("ateezCredencial"); } catch (err) {}
-    location.href = location.pathname + "#unete";
-    location.reload();
-  });
 
   $("btnGuardarBias").addEventListener("click", async () => {
     const msg = $("msgBias");
@@ -1626,10 +1614,13 @@
     pintarCredencial({});
     terminarCarga();
 
-    // Si ya se registró antes en este navegador, mostramos su credencial
+    // La credencial no se guarda en el navegador: al abrir la página siempre sale vacía.
+    // Solo si acaba de registrarse (viene de registro.html) la mostramos una vez.
     try {
-      const guardada = JSON.parse(localStorage.getItem("ateezCredencial") || "null");
-      if (guardada) mostrarCredencialFinal(guardada);
+      localStorage.removeItem("ateezCredencial");   // limpia lo guardado por versiones anteriores
+      const nueva = JSON.parse(sessionStorage.getItem("ateezCredencial") || "null");
+      sessionStorage.removeItem("ateezCredencial");
+      if (nueva && new URLSearchParams(location.search).get("registrado")) mostrarCredencialFinal(nueva);
     } catch (err) {}
 
     // Si viene de registro.html, mostramos el aviso y bajamos a la credencial
