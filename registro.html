@@ -204,8 +204,15 @@
 
     async function cargarDatos() {
       if (MODO_DEMO) return DEMO;
-      const res = await fetch(API_URL + "?action=data");
-      return await res.json();
+      // Si Google tarda demasiado, seguimos sin esperar
+      const control = new AbortController();
+      const corte = setTimeout(() => control.abort(), 10000);
+      try {
+        const res = await fetch(API_URL + "?action=data", { signal: control.signal });
+        return await res.json();
+      } finally {
+        clearTimeout(corte);
+      }
     }
 
     function pintarDatos() {
@@ -332,8 +339,19 @@
       const elegida = leerEraGuardada();
       if (elegida) aplicarTema(elegida);
 
-      try { DATA = await cargarDatos(); } catch (err) { console.error(err); DATA = DEMO; }
+      // Primero se muestra la lista de integrantes, así el formulario nunca queda vacío
+      DATA = { config: {}, integrantes: DEMO.integrantes };
       pintarDatos();
+
+      try {
+        const real = await cargarDatos();
+        if (real && real.config) {
+          const biasElegido = $("bias").value;
+          DATA = { config: real.config, integrantes: (real.integrantes && real.integrantes.length) ? real.integrantes : DEMO.integrantes };
+          pintarDatos();
+          $("bias").value = biasElegido;
+        }
+      } catch (err) { console.error(err); }
 
       if (!elegida) aplicarTema((DATA.config && DATA.config.comeback_era) || "tacna", false);
     })();
