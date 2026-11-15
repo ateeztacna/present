@@ -834,14 +834,22 @@
     return foto ? `<img src="${esc(foto)}" alt="${esc(nombre)}" loading="lazy"${cors} onerror="fotoFallo(this)">` : esc(String(nombre).charAt(0).toUpperCase());
   }
 
-  // Si la foto no carga: primero se reintenta sin CORS y, si sigue fallando, se muestra la inicial
+  // Si la foto no carga: 1) directa con CORS, 2) por un proxy de imágenes con CORS (para poder descargarla),
+  // 3) directa sin CORS (se ve en pantalla, pero no sale en la descarga), 4) la inicial
   function fotoFallo(img) {
-    if (img.hasAttribute("crossorigin")) {
-      img.removeAttribute("crossorigin");
-      img.src = img.src;
+    const etapa = img.dataset.etapa || "0";
+    if (!img.hasAttribute("crossorigin")) {
+      img.replaceWith(document.createTextNode(img.alt.charAt(0).toUpperCase()));
       return;
     }
-    img.replaceWith(document.createTextNode(img.alt.charAt(0).toUpperCase()));
+    if (etapa === "0") {
+      img.dataset.etapa = "1";
+      img.dataset.original = img.src;
+      img.src = "https://wsrv.nl/?url=" + encodeURIComponent(img.src);
+      return;
+    }
+    img.removeAttribute("crossorigin");
+    img.src = img.dataset.original;
   }
 
   let timerCumple = null;
@@ -1377,6 +1385,9 @@
     try {
       if (!window.html2canvas) throw new Error("No se cargó la herramienta de descarga.");
       $("cred").style.transform = "";
+      // Espera a que la foto termine de cargar (si no, sale vacía en la imagen)
+      const foto = $("credAvatar").querySelector("img");
+      if (foto && !foto.complete) await new Promise((ok) => { foto.onload = ok; foto.onerror = ok; setTimeout(ok, 4000); });
       const canvas = await html2canvas($("cred"), { backgroundColor: null, scale: 3, useCORS: true });
       const a = document.createElement("a");
       a.download = "credencial-atiny-tacna.png";
