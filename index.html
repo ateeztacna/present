@@ -646,7 +646,7 @@
   <div class="container text-center">
     <div class="brand d-inline-block mb-3"><span class="nombreGrupo">ATEEZ</span><small>ATINY TACNA · FAN CLUB</small></div>
     <div class="redes-foot mb-3" id="redesFoot"></div>
-    <p class="muted small mb-1">Fan club hecho por fans, sin fines de lucro y no oficial. La música, los nombres, logos e imágenes de <span class="nombreGrupo">ATEEZ</span> pertenecen a sus dueños (KQ Entertainment).</p>
+    <p class="muted small mb-1">Fan club hecho por fans, sin fines de lucro y oficial, pertenecientes a las sedes de Ateez Perú.</p>
     <p class="muted small mb-0">Hecho con 💜 en Tacna, Perú</p>
   </div>
 </footer>
@@ -1462,14 +1462,16 @@
     ["listaIntegrantes", "listaVideos", "listaFotos", "listaRedes", "listaEventos", "listaRanking"].forEach((id) => $(id).classList.add("aparece"));
   }
 
-  (async function iniciar() {
-    mostrarCarga();
-    try { DATA = await cargarDatos(); } catch (err) { console.error(err); DATA = datosDemo(); }
+  // Guardamos los últimos datos en el navegador: la segunda visita aparece al instante
+  const CLAVE_CACHE = "ateezDatos";
+  function leerCache() {
+    try { return JSON.parse(localStorage.getItem(CLAVE_CACHE) || "null"); } catch (err) { return null; }
+  }
+  function guardarCache(datos) {
+    try { localStorage.setItem(CLAVE_CACHE, JSON.stringify(datos)); } catch (err) {}
+  }
 
-    // Si la persona no eligió era, se usa la del comeback (si hay) o la de Tacna
-    const eraElegida = leerEraGuardada();
-    const eraInicial = eraElegida || (DATA.config && DATA.config.comeback_era) || "tacna";
-
+  function pintarDatos() {
     pintarConfig();
     pintarComeback();
     pintarIntegrantes();
@@ -1480,6 +1482,24 @@
     pintarRedes();
     pintarFooterRedes();
     pintarRanking();
+  }
+
+  (async function iniciar() {
+    const guardados = MODO_DEMO ? null : leerCache();
+    const eraElegida = leerEraGuardada();
+
+    if (guardados) {
+      DATA = guardados;           // datos de la última visita: se muestran al instante
+    } else {
+      mostrarCarga();             // primera visita: esqueletos mientras llegan los datos
+      try { DATA = await cargarDatos(); } catch (err) { console.error(err); DATA = datosDemo(); }
+      if (!MODO_DEMO) guardarCache(DATA);
+    }
+
+    // Si la persona no eligió era, se usa la del comeback (si hay) o la de Tacna
+    const eraInicial = eraElegida || (DATA.config && DATA.config.comeback_era) || "tacna";
+
+    pintarDatos();
     aplicarEra(eraInicial, Boolean(eraElegida));   // también pinta las eras y los puntos del selector
     pintarCredencial({});
     terminarCarga();
@@ -1494,6 +1514,19 @@
     if (new URLSearchParams(location.search).get("registrado")) $("avisoRegistro").classList.remove("d-none");
     observarReveal();
     if (location.hash === "#unete") setTimeout(() => $("unete").scrollIntoView(), 300);
+
+    // Con datos guardados, pedimos los nuevos en segundo plano y actualizamos solo si cambiaron
+    if (guardados) {
+      try {
+        const nuevos = await cargarDatos();
+        if (JSON.stringify(nuevos) !== JSON.stringify(guardados)) {
+          DATA = nuevos;
+          guardarCache(nuevos);
+          pintarDatos();
+          observarReveal();
+        }
+      } catch (err) { console.error(err); }
+    }
   })();
 </script>
 </body>
