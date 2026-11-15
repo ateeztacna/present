@@ -140,10 +140,6 @@
             <input type="text" class="form-control" id="distrito" placeholder="Ej: Cercado, Alto de la Alianza, Gregorio Albarracín..." maxlength="60">
           </div>
           <div class="col-12">
-            <div class="form-check mb-2">
-              <input class="form-check-input" type="checkbox" id="mostrarCumple">
-              <label class="form-check-label small muted" for="mostrarCumple">🎂 Quiero que mi nombre aparezca en "Cumpleañeros ATINY Tacna" el mes de mi cumple (solo se muestra tu primer nombre y el día).</label>
-            </div>
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="acepto" required>
               <label class="form-check-label small muted" for="acepto">Acepto que el fan club use mis datos solo para contactarme y organizar actividades. *</label>
@@ -180,7 +176,7 @@
   </main>
 
   <footer class="text-center small muted pb-4 px-3">
-    Fan club hecho por fans, sin fines de lucro y no oficial. <span class="nombreGrupo">ATEEZ</span> pertenece a sus dueños (KQ Entertainment). Hecho con 💜 en Tacna, Perú.
+    Fan club hecho por fans, sin fines de lucro y oficial, pertenecientes a las sedes de Ateez Perú. Hecho con 💜 en Tacna, Perú.
   </footer>
 
   <script src="config.js"></script>
@@ -260,7 +256,6 @@
         correo: $("correo").value.trim().toLowerCase(),
         bias: $("bias").value,
         distrito: $("distrito").value.trim(),
-        mostrar_cumple: $("mostrarCumple").checked ? "SI" : "NO",
         web: $("web").value
       };
 
